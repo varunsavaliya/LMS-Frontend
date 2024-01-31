@@ -1,5 +1,5 @@
-
 # LMS-Frontend
+
 ## Run Locally
 
 Clone the project
@@ -25,4 +25,3 @@ Start the server
 ```bash
   npm run dev
 ```
-
