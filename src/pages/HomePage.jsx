@@ -13,7 +13,7 @@ function HomePage() {
               <span className="text-yellow-500 font-bold"> Online Courses</span>
             </h1>
             <p className="text-xl text-gray-200">
-              We have large library of courses tought by highly skilled and
+              We have large library of courses taught by highly skilled and
               qualified faculties at a very affordable cost
             </p>
 

@@ -1,4 +1,7 @@
 import React from "react";
+import aboutMainImage from "../assets/images/aboutMainImage.png";
+import CarouselSlide from "../components/CarouselSlide";
+import { celebrities } from "../constants/celebrityData.js";
 import HomeLayout from "../layouts/HomeLayout";
 
 export default function AboutUs() {
@@ -18,10 +21,29 @@ export default function AboutUs() {
               mankind.
             </p>
           </section>
+
+          <div className="w-1/2">
+            <img
+              id="test1"
+              style={{
+                filter: "drop-shadow(0px 10px 10px rgb(0,0,0));",
+              }}
+              alt="about main image"
+              className="drop-shadow-2xl"
+              src={aboutMainImage}
+            />
+          </div>
         </div>
 
-        <div className="carousel m-auto w-1/2 my-16">
-          <div className="carousel-item relative "></div>
+        <div className="carousel w-1/2 m-auto my-16">
+          {celebrities &&
+            celebrities.map((celebrity) => (
+              <CarouselSlide
+                {...celebrity}
+                key={celebrity.slideNumber}
+                totalSlides={celebrities.length}
+              />
+            ))}
         </div>
       </div>
     </HomeLayout>
