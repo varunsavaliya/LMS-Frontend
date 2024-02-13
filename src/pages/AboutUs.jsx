@@ -26,7 +26,7 @@ export default function AboutUs() {
             <img
               id="test1"
               style={{
-                filter: "drop-shadow(0px 10px 10px rgb(0,0,0));",
+                filter: "drop-shadow(0px 10px 10px rgb(0,0,0))",
               }}
               alt="about main image"
               className="drop-shadow-2xl"
