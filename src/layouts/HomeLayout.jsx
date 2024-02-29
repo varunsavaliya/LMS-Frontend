@@ -2,8 +2,9 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { FiMenu } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import Footer from "../components/shared/Footer";
+import { logout } from "../redux/slices/AuthSlice";
 
-import Footer from "../Components/Footer";
 function HomeLayout({ children }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,9 +31,8 @@ function HomeLayout({ children }) {
   async function handleLogout(e) {
     e.preventDefault();
 
-    // const res = await dispatch(logout());
-    // if(res?.payload?.success)
-    navigate("/");
+    const res = await dispatch(logout());
+    if (res?.payload?.success) navigate("/");
   }
 
   return (
@@ -99,10 +99,10 @@ function HomeLayout({ children }) {
             {isLoggedIn && (
               <li className="absolute bottom-4 w-[90%]">
                 <div className="w-full flex items-center justify-center hover:bg-transparent">
-                  <button className="btn-primary px-4 py-1 font-semibold rounded-md w-full">
+                  <button className="btn-primary border border-yellow-500 text-yellow-500 px-4 py-1 font-semibold rounded-md w-full whitespace-nowrap">
                     <Link to="/user/profile">Profile</Link>
                   </button>
-                  <button className="btn-secondary px-4 py-1 font-semibold rounded-md w-full">
+                  <button className="btn-secondary bg-white text-black px-4 py-1 font-semibold rounded-md w-full whitespace-nowrap">
                     <Link onClick={handleLogout}>Logout</Link>
                   </button>
                 </div>
@@ -113,7 +113,7 @@ function HomeLayout({ children }) {
       </div>
 
       {children}
-
+      
       <Footer />
     </div>
   );
