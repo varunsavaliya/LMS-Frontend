@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { AllRoutes } from "../../constants/Routes";
 
 export const CourseListItem = ({ data }) => {
   const navigate = useNavigate();
@@ -15,7 +16,9 @@ export const CourseListItem = ({ data }) => {
           <div className="flex flex-col space-y-2">
             <h2
               className="text-xl font-bold text-yellow-500 line-clamp-2 cursor-pointer"
-              onClick={() => navigate("/course/description/", { state: data })}
+              onClick={() =>
+                navigate(AllRoutes.CourseDescription, { state: data })
+              }
             >
               {data?.title}
             </h2>
@@ -38,7 +41,9 @@ export const CourseListItem = ({ data }) => {
             <div className="flex justify-between items-center">
               <button
                 className="btn"
-                onClick={() => navigate("/course/description", { state: data })}
+                onClick={() =>
+                  navigate(AllRoutes.CourseDescription, { state: data })
+                }
               >
                 See Course
               </button>

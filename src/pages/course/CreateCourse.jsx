@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import { AiOutlineArrowLeft } from "react-icons/ai";
+import { createCourse } from "../../redux/slices/CourseSlice";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { createCourse } from "../../redux/slices/CourseSlice";
 import HomeLayout from "../../layouts/HomeLayout";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import React, { useState } from "react";
+import { AllRoutes } from "../../constants/Routes";
 
 export const CreateCourse = () => {
   const initialCourseState = {
@@ -69,7 +70,7 @@ export const CreateCourse = () => {
     const response = await dispatch(createCourse(formData));
     if (response.payload.success) {
       setCourseDetails(initialCourseState);
-      navigate("/courses");
+      navigate(AllRoutes.Courses);
     }
   }
   return (

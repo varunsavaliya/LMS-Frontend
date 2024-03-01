@@ -1,39 +1,53 @@
 import "./App.css";
+import { AllRoutes } from "./constants/Routes";
+import { AuthRedirect } from "./components/shared/AuthRedirect";
 import { ContactUs } from "./pages/contact-us/ContactUs";
+import { CourseDescription } from "./pages/course/CourseDescription";
 import { CourseList } from "./pages/course/CourseList";
+import { CreateCourse } from "./pages/course/CreateCourse";
+import { Denied } from "./components/shared/Denied";
 import { Login } from "./pages/login/Login";
 import { NotFound } from "./components/shared/NotFound";
+import { Profile } from "./pages/user/Profile";
+import { RequireAuth } from "./components/shared/RequireAuth";
 import { Route, Routes } from "react-router-dom";
 import { SignUp } from "./pages/sign-up/SignUp";
+import { UserRole } from "./constants/UserRole";
 import AboutUs from "./pages/about-us/AboutUs";
 import HomePage from "./pages/home/HomePage";
-import { Denied } from "./components/shared/Denied";
-import { CourseDescription } from "./pages/course/CourseDescription";
-import { RequireAuth } from "./components/shared/RequireAuth";
-import { CreateCourse } from "./pages/course/CreateCourse";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<HomePage />}></Route>
-        <Route path="/about" element={<AboutUs />}></Route>
-        <Route path="/contact" element={<ContactUs />}></Route>
-        <Route path="/courses" element={<CourseList />}></Route>
-        <Route path="/denied" element={<Denied />}></Route>
+        <Route path={AllRoutes.Home} element={<HomePage />}></Route>
+        <Route path={AllRoutes.About} element={<AboutUs />}></Route>
+        <Route path={AllRoutes.Contact} element={<ContactUs />}></Route>
+        <Route path={AllRoutes.Courses} element={<CourseList />}></Route>
         <Route
-          path="/course/description"
+          path={AllRoutes.CourseDescription}
           element={<CourseDescription />}
         ></Route>
 
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
-
-        <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
-          <Route path="/course/create" element={<CreateCourse />} />
+        <Route element={<AuthRedirect />}>
+          <Route path={AllRoutes.SignUp} element={<SignUp />} />
+          <Route path={AllRoutes.Login} element={<Login />} />
         </Route>
 
-        <Route path="*" element={<NotFound />} />
+        <Route element={<RequireAuth allowedRoles={[UserRole.Admin]} />}>
+          <Route path={AllRoutes.CreateCourse} element={<CreateCourse />} />
+        </Route>
+
+        <Route
+          element={
+            <RequireAuth allowedRoles={[UserRole.Admin, UserRole.User]} />
+          }
+        >
+          <Route path={AllRoutes.UserProfile} element={<Profile />} />
+        </Route>
+
+        <Route path={AllRoutes.Denied} element={<Denied />}></Route>
+        <Route path={AllRoutes.NotFound} element={<NotFound />} />
       </Routes>
     </>
   );

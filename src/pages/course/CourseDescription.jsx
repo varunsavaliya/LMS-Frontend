@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { UserRole } from "../../constants/UserRole";
+import { useSelector } from "react-redux";
 import HomeLayout from "../../layouts/HomeLayout";
+import React from "react";
 
 export const CourseDescription = () => {
   const { state } = useLocation();
@@ -33,7 +34,7 @@ export const CourseDescription = () => {
                   {state?.createdBy}
                 </p>
 
-                {role === "ADMIN" || data?.subscription?.status === "ACTIVE" ? (
+                {role === UserRole.Admin || data?.subscription?.status === "ACTIVE" ? (
                   <button className="bg-yellow-600 text-xl rounded-md font-bold py-2 px-5 hover:bg-yellow-500 transition-all ease-in-out duration-300">
                     Watch Lectures
                   </button>

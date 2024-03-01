@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { toast } from "react-hot-toast";
+import { AllRoutes } from "../../constants/Routes";
 import { BsPersonCircle } from "react-icons/bs";
-import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { isEmailValid } from "../../helpers/regexMatcher";
-import HomeLayout from "../../layouts/HomeLayout";
 import { createAccount } from "../../redux/slices/AuthSlice";
+import { isEmailValid } from "../../helpers/regexMatcher";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import HomeLayout from "../../layouts/HomeLayout";
+import React, { useState } from "react";
 
 export const SignUp = () => {
   const dispatch = useDispatch();
@@ -79,7 +80,7 @@ export const SignUp = () => {
         avatar: "",
       });
       setPreviewImage("");
-      navigate("/");
+      navigate(AllRoutes.Home);
     }
   }
 
@@ -158,6 +159,7 @@ export const SignUp = () => {
               required
               placeholder="Enter your password"
               className="bg-transparent px-2 py-1 border rounded-lg"
+              autoComplete="true"
               onChange={handleUserInput}
               value={signUpData.password}
             />
@@ -172,7 +174,7 @@ export const SignUp = () => {
 
           <p className="text-center">
             Already have an account ?{" "}
-            <Link to="/login" className="link text-accent cursor-pointer">
+            <Link to={AllRoutes.Login} className="link text-accent cursor-pointer">
               Login
             </Link>
           </p>

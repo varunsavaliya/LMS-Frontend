@@ -1,9 +1,11 @@
 import { AiFillCloseCircle } from "react-icons/ai";
+import { AllRoutes } from "../constants/Routes";
 import { FiMenu } from "react-icons/fi";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import Footer from "../components/shared/Footer";
 import { logout } from "../redux/slices/AuthSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { UserRole } from "../constants/UserRole";
+import Footer from "../components/shared/Footer";
 
 function HomeLayout({ children }) {
   const dispatch = useDispatch();
@@ -32,7 +34,7 @@ function HomeLayout({ children }) {
     e.preventDefault();
 
     const res = await dispatch(logout());
-    if (res?.payload?.success) navigate("/");
+    if (res?.payload?.success) navigate(AllRoutes.Home);
   }
 
   return (
@@ -57,40 +59,40 @@ function HomeLayout({ children }) {
               </button>
             </li>
             <li>
-              <Link to="/">Home</Link>
+              <Link to={AllRoutes.Home}>Home</Link>
             </li>
 
-            {isLoggedIn && role === "ADMIN" && (
+            {isLoggedIn && role === UserRole.Admin && (
               <>
                 <li>
                   <Link to="/admin/dashboard"> Admin DashBoard</Link>
                 </li>
                 <li>
-                  <Link to="/course/create"> Create new course</Link>
+                  <Link to={AllRoutes.CreateCourse}> Create new course</Link>
                 </li>
               </>
             )}
 
             <li>
-              <Link to="/courses">All Courses</Link>
+              <Link to={AllRoutes.Courses}>All Courses</Link>
             </li>
 
             <li>
-              <Link to="/contact">Contact Us</Link>
+              <Link to={AllRoutes.Contact}>Contact Us</Link>
             </li>
 
             <li>
-              <Link to="/about">About Us</Link>
+              <Link to={AllRoutes.About}>About Us</Link>
             </li>
 
             {!isLoggedIn && (
               <li className="absolute bottom-4 w-[90%]">
                 <div className="w-full flex items-center justify-center hover:bg-transparent">
                   <button className="btn-primary border border-yellow-500 text-yellow-500 px-4 py-1 font-semibold rounded-md w-full whitespace-nowrap">
-                    <Link to="/login">Login</Link>
+                    <Link to={AllRoutes.Login}>Login</Link>
                   </button>
                   <button className="btn-secondary bg-white text-black px-4 py-1 font-semibold rounded-md w-full whitespace-nowrap">
-                    <Link to="/signup">Sign Up</Link>
+                    <Link to={AllRoutes.SignUp}>Sign Up</Link>
                   </button>
                 </div>
               </li>
@@ -100,7 +102,7 @@ function HomeLayout({ children }) {
               <li className="absolute bottom-4 w-[90%]">
                 <div className="w-full flex items-center justify-center hover:bg-transparent">
                   <button className="btn-primary border border-yellow-500 text-yellow-500 px-4 py-1 font-semibold rounded-md w-full whitespace-nowrap">
-                    <Link to="/user/profile">Profile</Link>
+                    <Link to={AllRoutes.UserProfile}>Profile</Link>
                   </button>
                   <button className="btn-secondary bg-white text-black px-4 py-1 font-semibold rounded-md w-full whitespace-nowrap">
                     <Link onClick={handleLogout}>Logout</Link>

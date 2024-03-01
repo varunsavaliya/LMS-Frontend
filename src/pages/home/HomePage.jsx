@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import HomeLayout from "../../layouts/HomeLayout";
 import HomePageImage from "../../assets/images/homePageMainImage.png";
+import { AllRoutes } from "../../constants/Routes";
 
 function HomePage() {
   return (
@@ -18,13 +19,13 @@ function HomePage() {
             </p>
 
             <div className="flex flex-wrap justify-center sm:justify-start gap-5">
-              <Link to="/courses">
+              <Link to={AllRoutes.Courses}>
                 <button className="bg-yellow-500 px-5 py-3 h-full rounded-md font-semibold text-lg cursor-pointer hover:bg-yellow-600 transition-all ease-in-out duration-300 whitespace-nowrap">
                   Explore courses
                 </button>
               </Link>
 
-              <Link className="m-0" to="/contact">
+              <Link className="m-0" to={AllRoutes.Contact}>
                 <button className="min-w-10 border border-yellow-500 px-5 py-3 rounded-md font-semibold text-lg cursor-pointer hover:bg-yellow-600 transition-all ease-in-out duration-300">
                   Contact Us
                 </button>

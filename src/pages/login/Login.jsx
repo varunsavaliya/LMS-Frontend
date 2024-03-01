@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import { AllRoutes } from "../../constants/Routes";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../../redux/slices/AuthSlice";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
 import HomeLayout from "../../layouts/HomeLayout";
-import { login } from "../../redux/slices/AuthSlice";
+import React, { useState } from "react";
 
 export const Login = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ export const Login = () => {
         email: "",
         password: "",
       });
-      navigate("/");
+      navigate(AllRoutes.Home);
     }
   }
 
@@ -72,6 +73,7 @@ export const Login = () => {
               required
               placeholder="Enter your password"
               className="bg-transparent px-2 py-1 border rounded-lg"
+              autoComplete="true"
               onChange={handleUserInput}
               value={loginData.password}
             />
@@ -86,7 +88,7 @@ export const Login = () => {
 
           <p className="text-center">
             Don't have an account ?{" "}
-            <Link to="/signup" className="link text-accent cursor-pointer">
+            <Link to={AllRoutes.SignUp} className="link text-accent cursor-pointer">
               Sign Up
             </Link>
           </p>

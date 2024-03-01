@@ -10,7 +10,6 @@ export const CourseList = () => {
 
   async function getAllCourses() {
     await dispatch(getCourses());
-    console.log("courses", courses);
   }
 
   useEffect(() => {
