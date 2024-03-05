@@ -1,12 +1,14 @@
-import { AllRoutes } from "../../constants/Routes";
-import { BsPersonCircle } from "react-icons/bs";
-import { createAccount } from "../../redux/slices/AuthSlice";
-import { isEmailValid } from "../../helpers/regexMatcher";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
-import { useDispatch } from "react-redux";
-import HomeLayout from "../../layouts/HomeLayout";
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
+import { BsPersonCircle } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { CustomButton } from "../../components/shared/CustomButton";
+import { CustomInput } from "../../components/shared/CustomInput";
+import { AllRoutes } from "../../constants/Routes";
+import { isEmailValid } from "../../helpers/regexMatcher";
+import HomeLayout from "../../layouts/HomeLayout";
+import { createAccount } from "../../redux/slices/AuthSlice";
 
 export const SignUp = () => {
   const dispatch = useDispatch();
@@ -115,66 +117,36 @@ export const SignUp = () => {
             name="image_uploads"
             accept=".jpg, .jpeg, .png,.svg"
           />
-
-          <div className="flex flex-col gap-1">
-            <label htmlFor="fullName" className="font-semibold">
-              Name
-            </label>
-            <input
-              type="text"
-              name="fullName"
-              id="fullName"
-              required
-              placeholder="Enter your name"
-              className="bg-transparent px-2 py-1 border rounded-lg"
-              onChange={handleUserInput}
-              value={signUpData.fullName}
-            />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label htmlFor="email" className="font-semibold">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              required
-              placeholder="Enter your email"
-              className="bg-transparent px-2 py-1 border rounded-lg"
-              onChange={handleUserInput}
-              value={signUpData.email}
-            />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <label htmlFor="password" className="font-semibold">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              required
-              placeholder="Enter your password"
-              className="bg-transparent px-2 py-1 border rounded-lg"
-              autoComplete="true"
-              onChange={handleUserInput}
-              value={signUpData.password}
-            />
-          </div>
-
-          <button
-            className="bg-yellow-600 hover:bg-transparent border hover:text-yellow-600 border-yellow-600 rounded-lg py-1 mt-6 transition-all ease-in-out duration-300 font-semibold text-lg"
-            type="submit"
-          >
-            Create Account
-          </button>
-
+          <CustomInput
+            label="Name"
+            name="fullName"
+            placeholder="Enter your name"
+            onChange={handleUserInput}
+            value={signUpData.fullName}
+          />
+          <CustomInput
+            label="Email"
+            name="email"
+            placeholder="Enter your email"
+            onChange={handleUserInput}
+            value={signUpData.email}
+            type="email"
+          />
+          <CustomInput
+            label="Password"
+            name="password"
+            placeholder="Enter your password"
+            onChange={handleUserInput}
+            value={signUpData.password}
+            type="password"
+          />
+          <CustomButton title="Create Account" type="submit" />
           <p className="text-center">
             Already have an account ?{" "}
-            <Link to={AllRoutes.Login} className="link text-accent cursor-pointer">
+            <Link
+              to={AllRoutes.Login}
+              className="link text-accent cursor-pointer"
+            >
               Login
             </Link>
           </p>

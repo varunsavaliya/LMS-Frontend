@@ -1,21 +1,66 @@
 import { AiFillCloseCircle } from "react-icons/ai";
-import { AllRoutes } from "../constants/Routes";
 import { FiMenu } from "react-icons/fi";
-import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../redux/slices/AuthSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { UserRole } from "../constants/UserRole";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { CustomButton } from "../components/shared/CustomButton";
 import Footer from "../components/shared/Footer";
+import { NavListItem } from "../components/shared/NavListItem";
+import { AllRoutes } from "../constants/Routes";
+import { UserRole } from "../constants/UserRole";
+import { logout, useSelectorUserState } from "../redux/slices/AuthSlice";
 
 function HomeLayout({ children }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // for checking if user is logged in
-  const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
+  const { isLoggedIn, role } = useSelectorUserState();
 
-  // for displaying the options acc to role
-  const role = useSelector((state) => state?.auth?.role);
+  const getButtonsAccordingly = () => {
+    if (isLoggedIn) {
+      return (
+        <>
+          <CustomButton
+            route={AllRoutes.UserProfile}
+            title="Profile"
+            designType="primary"
+          />
+          <CustomButton
+            clickHandler={handleLogout}
+            title="Logout"
+            designType="secondary"
+          />
+        </>
+      );
+    } else {
+      return (
+        <>
+          <CustomButton
+            route={AllRoutes.Login}
+            title="Login"
+            designType="primary"
+          />
+          <CustomButton
+            route={AllRoutes.SignUp}
+            title="Sign Up"
+            designType="secondary"
+          />
+        </>
+      );
+    }
+  };
+
+  function getAdminNavigation() {
+    if (isLoggedIn && role === UserRole.Admin)
+      return (
+        <>
+          <NavListItem title="Admin DashBoard" route="/admin/dashboard" />
+          <NavListItem
+            title="Create new course"
+            route={AllRoutes.CreateCourse}
+          />
+        </>
+      );
+  }
 
   function changeWidth() {
     const drawerSide = document.getElementsByClassName("drawer-side");
@@ -58,64 +103,23 @@ function HomeLayout({ children }) {
                 <AiFillCloseCircle size={24} />
               </button>
             </li>
-            <li>
-              <Link to={AllRoutes.Home}>Home</Link>
+            <NavListItem title="Home" route={AllRoutes.Home} />
+            {getAdminNavigation()}
+            <NavListItem title="All Courses" route={AllRoutes.Courses} />
+            <NavListItem title="Contact Us" route={AllRoutes.Contact} />
+            <NavListItem title="About Us" route={AllRoutes.About} />
+
+            <li className="absolute bottom-4 w-[90%]">
+              <div className="w-full flex items-center justify-center hover:bg-transparent">
+                {getButtonsAccordingly()}
+              </div>
             </li>
-
-            {isLoggedIn && role === UserRole.Admin && (
-              <>
-                <li>
-                  <Link to="/admin/dashboard"> Admin DashBoard</Link>
-                </li>
-                <li>
-                  <Link to={AllRoutes.CreateCourse}> Create new course</Link>
-                </li>
-              </>
-            )}
-
-            <li>
-              <Link to={AllRoutes.Courses}>All Courses</Link>
-            </li>
-
-            <li>
-              <Link to={AllRoutes.Contact}>Contact Us</Link>
-            </li>
-
-            <li>
-              <Link to={AllRoutes.About}>About Us</Link>
-            </li>
-
-            {!isLoggedIn && (
-              <li className="absolute bottom-4 w-[90%]">
-                <div className="w-full flex items-center justify-center hover:bg-transparent">
-                  <button className="btn-primary border border-yellow-500 text-yellow-500 px-4 py-1 font-semibold rounded-md w-full whitespace-nowrap">
-                    <Link to={AllRoutes.Login}>Login</Link>
-                  </button>
-                  <button className="btn-secondary bg-white text-black px-4 py-1 font-semibold rounded-md w-full whitespace-nowrap">
-                    <Link to={AllRoutes.SignUp}>Sign Up</Link>
-                  </button>
-                </div>
-              </li>
-            )}
-
-            {isLoggedIn && (
-              <li className="absolute bottom-4 w-[90%]">
-                <div className="w-full flex items-center justify-center hover:bg-transparent">
-                  <button className="btn-primary border border-yellow-500 text-yellow-500 px-4 py-1 font-semibold rounded-md w-full whitespace-nowrap">
-                    <Link to={AllRoutes.UserProfile}>Profile</Link>
-                  </button>
-                  <button className="btn-secondary bg-white text-black px-4 py-1 font-semibold rounded-md w-full whitespace-nowrap">
-                    <Link onClick={handleLogout}>Logout</Link>
-                  </button>
-                </div>
-              </li>
-            )}
           </ul>
         </div>
       </div>
 
       {children}
-      
+
       <Footer />
     </div>
   );

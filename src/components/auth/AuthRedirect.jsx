@@ -1,7 +1,7 @@
-import { AllRoutes } from "../../constants/Routes";
-import { Navigate, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
 import React from "react";
+import { useSelector } from "react-redux";
+import { Navigate, Outlet } from "react-router-dom";
+import { AllRoutes } from "../../constants/Routes";
 
 // this is used for redirect from login and sign up when user logged in
 export const AuthRedirect = () => {

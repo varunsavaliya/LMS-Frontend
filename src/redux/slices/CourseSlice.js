@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { toast } from "react-hot-toast";
 import { EndPoints } from "../../constants/EndPoints";
+import { Messages } from "../../constants/Messages";
+import { promiseToaster } from "../../utils/ToasterService";
 import axiosInstance from "../../helpers/axiosInstance";
 
 const initialState = {
@@ -8,32 +9,19 @@ const initialState = {
 };
 
 export const getCourses = createAsyncThunk("course/get", async () => {
-  try {
-    const res = axiosInstance.get(EndPoints.Course.Get.GetAllCourse);
-    const toastId = toast.loading("Courses loading...");
-    const data = (await res).data;
-
-    // dismiss the toast
-    toast.dismiss(toastId);
-
-    return data;
-  } catch (error) {
-    toast.error(error?.response?.data?.message ?? error?.message);
-  }
+  const res = promiseToaster(
+    axiosInstance.get(EndPoints.Course.Get.GetAllCourse),
+    Messages.Loading.Course.Courses
+  );
+  return (await res).data;
 });
 
 export const createCourse = createAsyncThunk("course/create", async (data) => {
-  try {
-    const res = axiosInstance.post(EndPoints.Course.Post.Create, data);
-    toast.promise(res, {
-      loading: "Wait! while creating course...",
-      success: "Course created successfully",
-      error: "Failed to create course",
-    });
-    return (await res).data;
-  } catch (error) {
-    toast.error(error?.response?.data?.message ?? error?.message);
-  }
+  const res = promiseToaster(
+    axiosInstance.post(EndPoints.Course.Post.Create, data),
+    Messages.Loading.Course.CreateCourse
+  );
+  return (await res).data;
 });
 
 const courseSlice = createSlice({

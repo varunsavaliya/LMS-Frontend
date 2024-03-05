@@ -1,12 +1,26 @@
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { UserRole } from "../../constants/UserRole";
-import { useSelector } from "react-redux";
 import HomeLayout from "../../layouts/HomeLayout";
-import React from "react";
+import { getLoggedInUser } from "../../redux/slices/AuthSlice";
 
 export const CourseDescription = () => {
   const { state } = useLocation();
-  const { role, data } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { role } = useSelector((state) => state.auth);
+  const [data, setData] = useState({});
+
+  async function getUserData() {
+    const response = await dispatch(getLoggedInUser());
+    if (response?.payload?.success) {
+      setData(response.payload.data);
+    }
+  }
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   return (
     <HomeLayout>
@@ -34,7 +48,8 @@ export const CourseDescription = () => {
                   {state?.createdBy}
                 </p>
 
-                {role === UserRole.Admin || data?.subscription?.status === "ACTIVE" ? (
+                {role === UserRole.Admin ||
+                data?.subscription?.status === "ACTIVE" ? (
                   <button className="bg-yellow-600 text-xl rounded-md font-bold py-2 px-5 hover:bg-yellow-500 transition-all ease-in-out duration-300">
                     Watch Lectures
                   </button>

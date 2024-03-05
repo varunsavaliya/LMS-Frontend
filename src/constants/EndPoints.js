@@ -3,9 +3,12 @@ export const EndPoints = {
     Post: {
       Login: "user/login",
       Register: "user/register",
+      ChangePassword: "user/change-password",
+      EditProfile: "user/update-me",
     },
     Get: {
       Logout: "user/logout",
+      Profile: "user/me",
     },
   },
   Course: {
