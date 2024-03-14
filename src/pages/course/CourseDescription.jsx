@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AllRoutes } from "../../constants/Routes";
 import { UserRole } from "../../constants/UserRole";
 import HomeLayout from "../../layouts/HomeLayout";
-import { getLoggedInUser } from "../../redux/slices/AuthSlice";
+import {
+  getLoggedInUser,
+  useSelectorUserState,
+} from "../../redux/slices/AuthSlice";
 
 export const CourseDescription = () => {
   const { state } = useLocation();
   const dispatch = useDispatch();
-  const { role } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const { role } = useSelectorUserState();
   const [data, setData] = useState({});
 
   async function getUserData() {
@@ -49,12 +54,22 @@ export const CourseDescription = () => {
                 </p>
 
                 {role === UserRole.Admin ||
-                data?.subscription?.status === "ACTIVE" ? (
-                  <button className="bg-yellow-600 text-xl rounded-md font-bold py-2 px-5 hover:bg-yellow-500 transition-all ease-in-out duration-300">
+                data?.subscription?.status === "active" ? (
+                  <button
+                    onClick={() =>
+                      navigate(AllRoutes.CourseLectures, {
+                        state: { ...state },
+                      })
+                    }
+                    className="bg-yellow-600 text-xl rounded-md font-bold py-2 px-5 hover:bg-yellow-500 transition-all ease-in-out duration-300"
+                  >
                     Watch Lectures
                   </button>
                 ) : (
-                  <button className="bg-yellow-600 text-xl rounded-md font-bold py-2 px-5 hover:bg-yellow-500 transition-all ease-in-out duration-300">
+                  <button
+                    onClick={() => navigate(AllRoutes.Checkout)}
+                    className="bg-yellow-600 text-xl rounded-md font-bold py-2 px-5 hover:bg-yellow-500 transition-all ease-in-out duration-300"
+                  >
                     Subscribe
                   </button>
                 )}

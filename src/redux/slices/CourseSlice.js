@@ -3,6 +3,7 @@ import { EndPoints } from "../../constants/EndPoints";
 import { Messages } from "../../constants/Messages";
 import { promiseToaster } from "../../utils/ToasterService";
 import axiosInstance from "../../helpers/axiosInstance";
+import { useSelector } from "react-redux";
 
 const initialState = {
   courses: [],
@@ -36,5 +37,10 @@ const courseSlice = createSlice({
     });
   },
 });
+
+export const useSelectorCourseState = () => {
+  const courseState = useSelector((state) => state?.course);
+  return courseState;
+};
 
 export default courseSlice.reducer;

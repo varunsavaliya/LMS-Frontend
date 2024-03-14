@@ -1,6 +1,6 @@
 import React from "react";
 import CarouselSlide from "../../components/about-us/CarouselSlide";
-import { celebrities } from "../../constants/celebrityData.js";
+import { celebrities } from "../../constants/CelebrityData.js";
 import HomeLayout from "../../layouts/HomeLayout";
 import aboutMainImage from "../../assets/images/aboutMainImage.png";
 

@@ -10,4 +10,9 @@ export const AllRoutes = {
   UserProfile: "/user/profile",
   Denied: "/denied",
   NotFound: "*",
+  Checkout: "/checkout",
+  CheckoutSuccess: "/checkout/success",
+  CheckoutFail: "/checkout/fail",
+  CourseLectures: '/course/lectures',
+  AddLecture: '/course/add-lecture'
 };

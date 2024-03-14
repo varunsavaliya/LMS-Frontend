@@ -75,7 +75,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     updateUserState: (state, action) => {
-      console.log(action);
       if (action.payload) {
         state.isLoggedIn = action.payload.isLoggedIn;
         state.role = action.payload.role;
@@ -91,7 +90,6 @@ const authSlice = createSlice({
         }
       })
       .addCase(login.fulfilled, (state, action) => {
-        updateUserState(action);
         if (action?.payload) {
           state.isLoggedIn = true;
           state.role = action?.payload?.user?.role;

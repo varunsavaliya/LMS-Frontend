@@ -1,26 +1,34 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { AuthRedirect } from "./components/auth/AuthRedirect";
-import { RequireAuth } from "./components/auth/RequireAuth";
-import { Denied } from "./components/shared/Denied";
-import { NotFound } from "./components/shared/NotFound";
 import { AllRoutes } from "./constants/Routes";
-import { UserRole } from "./constants/UserRole";
+import { Denied } from "./components/shared/Denied";
+import { getRole, isTokenValid } from "./utils/AuthService";
+import { NormalRoutes } from "./routes/NormalRoutes";
+import { NotFound } from "./components/shared/NotFound";
+import { Route, Routes } from "react-router-dom";
+import { SecuredRoutes } from "./routes/SecuredRoutes";
+import { updateUserState } from "./redux/slices/AuthSlice";
+import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import HomePage from "./pages/home/HomePage";
 import AboutUs from "./pages/about-us/AboutUs";
 import { ContactUs } from "./pages/contact-us/ContactUs";
-import { CourseDescription } from "./pages/course/CourseDescription";
 import { CourseList } from "./pages/course/CourseList";
-import { CreateCourse } from "./pages/course/CreateCourse";
-import HomePage from "./pages/home/HomePage";
-import { Login } from "./pages/login/Login";
+import { CourseDescription } from "./pages/course/CourseDescription";
 import { SignUp } from "./pages/sign-up/SignUp";
+import { Login } from "./pages/login/Login";
+import { AuthRedirect } from "./components/auth/AuthRedirect";
+import { RequireAuth } from "./components/auth/RequireAuth";
+import { CreateCourse } from "./pages/course/CreateCourse";
 import { Profile } from "./pages/user/Profile";
-import { updateUserState } from "./redux/slices/AuthSlice";
-import { getRole, isTokenValid } from "./utils/AuthService";
+import { Checkout } from "./pages/payment/Checkout";
+import { CheckoutSuccess } from "./pages/payment/CheckoutSuccess";
+import { CheckoutFailure } from "./pages/payment/CheckoutFailure";
+import { CourseLectures } from "./pages/course/CourseLectures";
+import { UserRole } from "./constants/UserRole";
+import { AddLecture } from "./pages/dashboard/AddLecture";
 
 function App() {
+  const [isUserStateSet, setUserStateSet] = useState(false);
   const dispatch = useDispatch();
   function setUserStates() {
     const userState = {
@@ -28,6 +36,7 @@ function App() {
       role: getRole(),
     };
     dispatch(updateUserState(userState));
+    setUserStateSet(true);
   }
 
   useEffect(() => {
@@ -36,36 +45,54 @@ function App() {
 
   return (
     <>
-      <Routes>
-        <Route path={AllRoutes.Home} element={<HomePage />}></Route>
-        <Route path={AllRoutes.About} element={<AboutUs />}></Route>
-        <Route path={AllRoutes.Contact} element={<ContactUs />}></Route>
-        <Route path={AllRoutes.Courses} element={<CourseList />}></Route>
-        <Route
-          path={AllRoutes.CourseDescription}
-          element={<CourseDescription />}
-        ></Route>
+      {isUserStateSet && (
+        <Routes>
+          <Route path={AllRoutes.Home} element={<HomePage />}></Route>
+          <Route path={AllRoutes.About} element={<AboutUs />}></Route>
+          <Route path={AllRoutes.Contact} element={<ContactUs />}></Route>
+          <Route path={AllRoutes.Courses} element={<CourseList />}></Route>
+          <Route
+            path={AllRoutes.CourseDescription}
+            element={<CourseDescription />}
+          ></Route>
 
-        <Route element={<AuthRedirect />}>
-          <Route path={AllRoutes.SignUp} element={<SignUp />} />
-          <Route path={AllRoutes.Login} element={<Login />} />
-        </Route>
+          <Route element={<AuthRedirect />}>
+            <Route path={AllRoutes.SignUp} element={<SignUp />} />
+            <Route path={AllRoutes.Login} element={<Login />} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={[UserRole.Admin]} />}>
+            <Route path={AllRoutes.CreateCourse} element={<CreateCourse />} />
+          </Route>
 
-        <Route element={<RequireAuth allowedRoles={[UserRole.Admin]} />}>
-          <Route path={AllRoutes.CreateCourse} element={<CreateCourse />} />
-        </Route>
+          <Route
+            element={
+              <RequireAuth allowedRoles={[UserRole.Admin, UserRole.User]} />
+            }
+          >
+            <Route path={AllRoutes.UserProfile} element={<Profile />} />
+            <Route path={AllRoutes.Checkout} element={<Checkout />}></Route>
+            <Route
+              path={AllRoutes.CheckoutSuccess}
+              element={<CheckoutSuccess />}
+            ></Route>
+            <Route
+              path={AllRoutes.CheckoutFail}
+              element={<CheckoutFailure />}
+            ></Route>
+            <Route
+              path={AllRoutes.CourseLectures}
+              element={<CourseLectures />}
+            />
+            <Route
+              path={AllRoutes.AddLecture}
+              element={<AddLecture />}
+            />
+          </Route>
 
-        <Route
-          element={
-            <RequireAuth allowedRoles={[UserRole.Admin, UserRole.User]} />
-          }
-        >
-          <Route path={AllRoutes.UserProfile} element={<Profile />} />
-        </Route>
-
-        <Route path={AllRoutes.Denied} element={<Denied />}></Route>
-        <Route path={AllRoutes.NotFound} element={<NotFound />} />
-      </Routes>
+          <Route path={AllRoutes.Denied} element={<Denied />}></Route>
+          <Route path={AllRoutes.NotFound} element={<NotFound />} />
+        </Routes>
+      )}
     </>
   );
 }

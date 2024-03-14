@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { CourseListItem } from "../../components/course/CourseListItem";
 import HomeLayout from "../../layouts/HomeLayout";
-import { getCourses } from "../../redux/slices/CourseSlice";
+import {
+  getCourses,
+  useSelectorCourseState,
+} from "../../redux/slices/CourseSlice";
 
 export const CourseList = () => {
   const dispatch = useDispatch();
-  const { courses } = useSelector((state) => state.course);
+  const { courses } = useSelectorCourseState();
 
   async function getAllCourses() {
     await dispatch(getCourses());
@@ -24,6 +27,7 @@ export const CourseList = () => {
           <span className="font-bold text-yellow-500"> Industry Experts</span>
         </h1>
         <div className="mb-10 flex flex-wrap gap-14 justify-center items-center">
+          {!courses.length && <span>No Courses to Display</span>}
           {courses?.map((element) => {
             return <CourseListItem key={element._id} data={element} />;
           })}

@@ -47,7 +47,10 @@ export const CourseListItem = ({ data }) => {
               >
                 See Course
               </button>
-              <button className="btn bg-transparent border-2 hover:bg-gray-800">
+              <button
+                onClick={() => navigate(AllRoutes.Checkout)}
+                className="btn bg-transparent border-2 hover:bg-gray-800"
+              >
                 Enroll Now
               </button>
             </div>

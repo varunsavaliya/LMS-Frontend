@@ -19,4 +19,17 @@ export const EndPoints = {
       GetAllCourse: "course",
     },
   },
+  Lecture: {
+    Path: "course",
+    Get:{
+      AllLectures: 'lectures'
+    }
+  },
+  Payment: {
+    RazorpayId: "/payment/razorpay-key",
+    PurchaseCourseBundle: "/payment/subscribe",
+    VerifyPayment: "/payment/verify",
+    PaymentRecords: "/payment?count=100",
+    CancelCourseBundle: "/payment/unsubscribe",
+  },
 };

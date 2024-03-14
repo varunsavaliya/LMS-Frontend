@@ -9,6 +9,7 @@ import {
   editProfile,
   getLoggedInUser,
 } from "../../redux/slices/AuthSlice";
+import { cancelCourseBundle } from "../../redux/slices/RazorpaySlice";
 
 export const Profile = () => {
   const dispatch = useDispatch();
@@ -105,7 +106,6 @@ export const Profile = () => {
 
   useEffect(() => {
     getUserProfile();
-    console.log(userData);
   }, []);
 
   useEffect(() => {
@@ -114,7 +114,10 @@ export const Profile = () => {
     }
   }, [editUserData.avatar]);
 
-  function handleCancellation() {}
+  async function handleCancellation() {
+    await dispatch(cancelCourseBundle());
+    getUserProfile();
+  }
 
   return (
     <HomeLayout>
@@ -152,7 +155,7 @@ export const Profile = () => {
             <p>Subscription: </p>
             <p>
               {userData?.subscription?.status === "active"
-                ? "Action"
+                ? "Active"
                 : "Inactive"}
             </p>
           </div>
