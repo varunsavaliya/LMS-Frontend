@@ -25,6 +25,17 @@ export const createCourse = createAsyncThunk("course/create", async (data) => {
   return (await res).data;
 });
 
+export const updateCourse = createAsyncThunk("course/create", async (data) => {
+  const res = promiseToaster(
+    axiosInstance.put(
+      `${EndPoints.Course.Post.Update}/${data.get("id")}`,
+      data
+    ),
+    Messages.Loading.Course.UpdateCourse
+  );
+  return (await res).data;
+});
+
 const courseSlice = createSlice({
   name: "course",
   initialState,

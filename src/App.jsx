@@ -6,7 +6,7 @@ import { NormalRoutes } from "./routes/NormalRoutes";
 import { NotFound } from "./components/shared/NotFound";
 import { Route, Routes } from "react-router-dom";
 import { SecuredRoutes } from "./routes/SecuredRoutes";
-import { updateUserState } from "./redux/slices/AuthSlice";
+import { getLoggedInUser, updateUserState } from "./redux/slices/AuthSlice";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import HomePage from "./pages/home/HomePage";
@@ -30,12 +30,13 @@ import { AddLecture } from "./pages/dashboard/AddLecture";
 function App() {
   const [isUserStateSet, setUserStateSet] = useState(false);
   const dispatch = useDispatch();
-  function setUserStates() {
+  async function setUserStates() {
     const userState = {
       isLoggedIn: isTokenValid(),
       role: getRole(),
     };
     dispatch(updateUserState(userState));
+    userState.isLoggedIn && (await dispatch(getLoggedInUser()));
     setUserStateSet(true);
   }
 
@@ -83,10 +84,7 @@ function App() {
               path={AllRoutes.CourseLectures}
               element={<CourseLectures />}
             />
-            <Route
-              path={AllRoutes.AddLecture}
-              element={<AddLecture />}
-            />
+            <Route path={AllRoutes.AddLecture} element={<AddLecture />} />
           </Route>
 
           <Route path={AllRoutes.Denied} element={<Denied />}></Route>

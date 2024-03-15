@@ -4,10 +4,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AllRoutes } from "../../constants/Routes";
 import HomeLayout from "../../layouts/HomeLayout";
 import { showToaster } from "../../utils/ToasterService";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import {
+  addCourseLectures,
+  updateCourseLectures,
+} from "../../redux/slices/LectureSlice";
+import { BackButton } from "../../components/shared/BackButton";
 
 export const AddLecture = () => {
-  const courseDetails = useLocation().state;
+  const { courseDetails, lectureDetails } = useLocation().state;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,7 +35,6 @@ export const AddLecture = () => {
   function handleVideo(e) {
     const video = e.target.files[0];
     const source = window.URL.createObjectURL(video);
-    console.log(source);
     setUserInput({
       ...userInput,
       lecture: video,
@@ -41,13 +44,21 @@ export const AddLecture = () => {
 
   async function onFormSubmit(e) {
     e.preventDefault();
-    if (!userInput.lecture || !userInput.title || !userInput.description) {
+    if (!lectureDetails && !userInput.lecture) {
+      showToaster("error", "Lecture video is mandatory");
+      return;
+    }
+    if (!userInput.title || !userInput.description) {
       showToaster("error", "All fields are mandatory");
       return;
     }
-    const response = await dispatch(addCourseLecture(userInput));
+    const response = lectureDetails?._id
+      ? await dispatch(
+          updateCourseLectures({ ...userInput, lectureId: lectureDetails._id })
+        )
+      : await dispatch(addCourseLectures(userInput));
     if (response?.payload?.success) {
-      navigate(-1);
+      navigate(AllRoutes.CourseLectures, { state: courseDetails });
       setUserInput({
         id: courseDetails?._id,
         lecture: undefined,
@@ -58,21 +69,29 @@ export const AddLecture = () => {
     }
   }
 
+  function setLectureDetails() {
+    setUserInput({
+      ...userInput,
+      title: lectureDetails.title,
+      description: lectureDetails.description,
+      videoSrc: lectureDetails.lecture?.secure_url,
+    });
+  }
+
   useEffect(() => {
     if (!courseDetails) navigate(AllRoutes.Courses);
+    if (lectureDetails) setLectureDetails();
   }, []);
 
   return (
     <HomeLayout>
       <div className="min-h-[90vh] text-white flex flex-col items-center justify-center gap-10 mx-16">
         <div className="flex flex-col gap-5 p-2 shadow-[0_0_10px_black] w-96 rounded-lg">
-          <header className="flex items-center justify-center relative">
-            <button
-              className="absolute left-2 text-xl text-green-500"
-              onClick={() => navigate(-1)}
-            >
-              <AiOutlineArrowLeft />
-            </button>
+          <header className="flex items-center justify-start gap-5">
+            <BackButton
+              route={AllRoutes.CourseLectures}
+              state={courseDetails}
+            />
             <h1 className="text-xl text-yellow-500 font-semibold">
               Add new lecture
             </h1>
@@ -95,32 +114,40 @@ export const AddLecture = () => {
               value={userInput.description}
             />
             {userInput.videoSrc ? (
-              <video
-                muted
-                src={userInput.videoSrc}
-                controls
-                controlsList="nodownload nofullscreen"
-                disablePictureInPicture
-                className="object-fill rounded-tl-lg rounded-tr-lg w-full"
-              ></video>
+              <>
+                <video
+                  muted
+                  src={userInput.videoSrc}
+                  controls
+                  controlsList="nodownload nofullscreen"
+                  disablePictureInPicture
+                  className="object-fill rounded-tl-lg rounded-tr-lg w-full"
+                ></video>
+                <label
+                  className="cursor-pointer text-sm text-blue-400 underline"
+                  htmlFor="lecture"
+                >
+                  Replace Video
+                </label>
+              </>
             ) : (
               <div className="h-48 border flex items-center justify-center cursor-pointer">
                 <label
-                  className="font-semibold text-cl cursor-pointer"
+                  className="cursor-pointer flex font-semibold h-full items-center justify-center m-auto text-cl w-full"
                   htmlFor="lecture"
                 >
                   Choose your video
                 </label>
-                <input
-                  type="file"
-                  className="hidden"
-                  id="lecture"
-                  name="lecture"
-                  onChange={handleVideo}
-                  accept="video/mp4 video/x-mp4 video/*"
-                />
               </div>
             )}
+            <input
+              type="file"
+              className="hidden"
+              id="lecture"
+              name="lecture"
+              onChange={handleVideo}
+              accept="video/mp4 video/x-mp4 video/*"
+            />
             <button
               type="submit"
               className="btn btn-primary py-1 font-semibold text-lg"

@@ -11,6 +11,7 @@ export const Messages = {
     Course: {
       Courses: "Courses loading...",
       CreateCourse: "Wait! while creating course...",
+      UpdateCourse: "Wait! while updating course...",
     },
   },
 };

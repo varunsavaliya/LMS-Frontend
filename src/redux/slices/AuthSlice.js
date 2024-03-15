@@ -8,6 +8,7 @@ import axiosInstance from "../../helpers/axiosInstance";
 const initialState = {
   isLoggedIn: false,
   role: "",
+  data: {},
 };
 
 export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
@@ -87,12 +88,19 @@ const authSlice = createSlice({
         if (action?.payload) {
           state.isLoggedIn = true;
           state.role = action?.payload?.user?.role;
+          state.data = action?.payload?.user;
         }
       })
       .addCase(login.fulfilled, (state, action) => {
         if (action?.payload) {
           state.isLoggedIn = true;
           state.role = action?.payload?.user?.role;
+          state.data = action?.payload?.user;
+        }
+      })
+      .addCase(getLoggedInUser.fulfilled, (state, action) => {
+        if (action?.payload) {
+          state.data = action?.payload?.data;
         }
       })
       .addCase(logout.fulfilled, (state) => {

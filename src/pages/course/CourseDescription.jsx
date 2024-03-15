@@ -1,35 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
 import { AllRoutes } from "../../constants/Routes";
+import { BackButton } from "../../components/shared/BackButton";
+import { useLocation, useNavigate } from "react-router-dom";
 import { UserRole } from "../../constants/UserRole";
+import { useSelectorUserState } from "../../redux/slices/AuthSlice";
 import HomeLayout from "../../layouts/HomeLayout";
-import {
-  getLoggedInUser,
-  useSelectorUserState,
-} from "../../redux/slices/AuthSlice";
+import React, { useEffect } from "react";
 
 export const CourseDescription = () => {
   const { state } = useLocation();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { role } = useSelectorUserState();
-  const [data, setData] = useState({});
-
-  async function getUserData() {
-    const response = await dispatch(getLoggedInUser());
-    if (response?.payload?.success) {
-      setData(response.payload.data);
-    }
-  }
+  const { isLoggedIn, role, data } = useSelectorUserState();
 
   useEffect(() => {
-    getUserData();
+    if (!state?.title) navigate(AllRoutes.Courses);
   }, []);
 
   return (
     <HomeLayout>
       <div className="container m-auto min-h-[90vh] pt-12 md:px-5 px-9 flex flex-col justify-center items-center text-white">
+        <div className="flex justify-center items-center gap-5">
+          <BackButton route={AllRoutes.Courses} />
+          <h1 className="text-3xl font-bold text-yellow-500">{state?.title}</h1>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-10 relative">
           <div className="space-y-5">
             <img
@@ -67,7 +59,11 @@ export const CourseDescription = () => {
                   </button>
                 ) : (
                   <button
-                    onClick={() => navigate(AllRoutes.Checkout)}
+                    onClick={() =>
+                      navigate(
+                        isLoggedIn ? AllRoutes.Checkout : AllRoutes.Login
+                      )
+                    }
                     className="bg-yellow-600 text-xl rounded-md font-bold py-2 px-5 hover:bg-yellow-500 transition-all ease-in-out duration-300"
                   >
                     Subscribe
@@ -77,9 +73,6 @@ export const CourseDescription = () => {
             </div>
           </div>
           <div className="space-y-2 text-xl text-center md:text-left">
-            <h1 className="text-3xl font-bold text-yellow-500 mb-5">
-              {state?.title}
-            </h1>
             <p className="text-yellow-500"> Course Description: </p>
             <p className="text-base sm:text-lg">{state?.description}</p>
           </div>

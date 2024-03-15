@@ -14,6 +14,7 @@ export const EndPoints = {
   Course: {
     Post: {
       Create: "course",
+      Update: "course",
     },
     Get: {
       GetAllCourse: "course",
@@ -21,9 +22,9 @@ export const EndPoints = {
   },
   Lecture: {
     Path: "course",
-    Get:{
-      AllLectures: 'lectures'
-    }
+    Get: {
+      AllLectures: "lectures",
+    },
   },
   Payment: {
     RazorpayId: "/payment/razorpay-key",

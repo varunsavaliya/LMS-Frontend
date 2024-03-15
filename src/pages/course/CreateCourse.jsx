@@ -1,14 +1,16 @@
-import { AiOutlineArrowLeft } from "react-icons/ai";
-import { createCourse } from "../../redux/slices/CourseSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { AllRoutes } from "../../constants/Routes";
+import { BackButton } from "../../components/shared/BackButton";
+import { createCourse, updateCourse } from "../../redux/slices/CourseSlice";
+import { CustomInput } from "../../components/shared/CustomInput";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import HomeLayout from "../../layouts/HomeLayout";
-import React, { useState } from "react";
-import { AllRoutes } from "../../constants/Routes";
+import React, { useEffect, useState } from "react";
 
 export const CreateCourse = () => {
   const initialCourseState = {
+    id: "",
     title: "",
     description: "",
     category: "",
@@ -18,6 +20,7 @@ export const CreateCourse = () => {
   };
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const [courseDetails, setCourseDetails] = useState(initialCourseState);
 
@@ -44,14 +47,19 @@ export const CreateCourse = () => {
 
   async function onFormSubmit(e) {
     e.preventDefault();
+    console.log(courseDetails);
     if (
       !courseDetails.title ||
       !courseDetails.description ||
       !courseDetails.category ||
-      !courseDetails.createdBy ||
-      !courseDetails.thumbnail
+      !courseDetails.createdBy
     ) {
       toast.error("Please fill all the details");
+      return;
+    }
+
+    if (!courseDetails.id && !courseDetails.thumbnail) {
+      toast.error("Course thumbnail is mandatory");
       return;
     }
 
@@ -65,14 +73,40 @@ export const CreateCourse = () => {
     formData.append("description", courseDetails.description);
     formData.append("category", courseDetails.category);
     formData.append("createdBy", courseDetails.createdBy);
-    formData.append("thumbnail", courseDetails.thumbnail);
 
-    const response = await dispatch(createCourse(formData));
-    if (response.payload.success) {
+    if (courseDetails.thumbnail)
+      formData.append("thumbnail", courseDetails.thumbnail);
+
+    if (courseDetails.id) formData.append("id", courseDetails.id);
+
+    const response = courseDetails.id
+      ? await dispatch(updateCourse(formData))
+      : await dispatch(createCourse(formData));
+    if (response?.payload?.success) {
       setCourseDetails(initialCourseState);
       navigate(AllRoutes.Courses);
     }
   }
+
+  function setStateInCourseDetails() {
+    setCourseDetails({
+      ...courseDetails,
+      id: state?._id,
+      title: state?.title,
+      description: state?.description,
+      category: state?.category,
+      createdBy: state?.createdBy,
+      thumbnail: null,
+      previewImage: state?.thumbnail?.secure_url,
+    });
+  }
+
+  useEffect(() => {
+    if (state?._id) {
+      setStateInCourseDetails();
+    }
+  }, []);
+
   return (
     <HomeLayout>
       <div className="container flex items-center justify-center h-[90vh] m-auto px-5 sm:px-0">
@@ -80,10 +114,12 @@ export const CreateCourse = () => {
           onSubmit={onFormSubmit}
           className="flex flex-col justify-center gap-5 rounded-lg p-4 text-white w-[700px] my-10 shadow-[0_0_10px_black] relative"
         >
-          <Link className="absolute top-6 text-2xl link text-accent cursor-pointer">
-            <AiOutlineArrowLeft />
-          </Link>
-          <h1 className="text-center text-2xl font-bold">Create New Course</h1>
+          <div className="flex justify-start items-center gap-5">
+            <BackButton route={AllRoutes.Courses} />
+            <h1 className="text-center text-2xl font-bold">
+              Create New Course
+            </h1>
+          </div>
 
           <main className="grid grid-cols-2 gap-x-10">
             <div className="gap-y-6">
@@ -112,54 +148,30 @@ export const CreateCourse = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
-                <label htmlFor="title" className="font-semibold text-lg">
-                  Course title
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  id="title"
-                  required
-                  placeholder="Enter course title"
-                  className="bg-transparent px-2 py-1 border rounded-lg"
-                  onChange={handleUserInput}
-                  value={courseDetails.title}
-                />
-              </div>
+              <CustomInput
+                label="Course title"
+                placeholder="Enter course title"
+                name="title"
+                value={courseDetails.title}
+                onChange={handleUserInput}
+              />
             </div>
 
             <div className="flex flex-col gap-1">
-              <div className="flex flex-col gap-1">
-                <label htmlFor="createdBy" className="font-semibold text-lg">
-                  Course instructor
-                </label>
-                <input
-                  type="text"
-                  name="createdBy"
-                  id="createdBy"
-                  required
-                  placeholder="Enter course instructor"
-                  className="bg-transparent px-2 py-1 border rounded-lg"
-                  onChange={handleUserInput}
-                  value={courseDetails.createdBy}
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label htmlFor="category" className="font-semibold text-lg">
-                  Course category
-                </label>
-                <input
-                  type="text"
-                  name="category"
-                  id="category"
-                  required
-                  placeholder="Enter course category"
-                  className="bg-transparent px-2 py-1 border rounded-lg"
-                  onChange={handleUserInput}
-                  value={courseDetails.category}
-                />
-              </div>
+              <CustomInput
+                label="Course instructor"
+                placeholder="Enter course instructor"
+                name="createdBy"
+                value={courseDetails.createdBy}
+                onChange={handleUserInput}
+              />
+              <CustomInput
+                label="Course category"
+                placeholder="Enter course category"
+                name="category"
+                value={courseDetails.category}
+                onChange={handleUserInput}
+              />
               <div className="flex flex-col gap-1">
                 <label htmlFor="description" className="font-semibold text-lg">
                   Course description
@@ -181,7 +193,7 @@ export const CreateCourse = () => {
             className="bg-yellow-600 hover:bg-transparent border hover:text-yellow-600 border-yellow-600 rounded-lg py-1 mt-6 transition-all ease-in-out duration-300 font-semibold text-lg"
             type="submit"
           >
-            Create Course
+            {courseDetails.id ? "Update Course" : "Create Course"}
           </button>
         </form>
       </div>

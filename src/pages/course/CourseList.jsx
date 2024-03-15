@@ -29,7 +29,7 @@ export const CourseList = () => {
         <div className="mb-10 flex flex-wrap gap-14 justify-center items-center">
           {!courses.length && <span>No Courses to Display</span>}
           {courses?.map((element) => {
-            return <CourseListItem key={element._id} data={element} />;
+            return <CourseListItem key={element._id} details={element} />;
           })}
         </div>
       </div>

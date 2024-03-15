@@ -8,35 +8,26 @@ import {
   changePassword,
   editProfile,
   getLoggedInUser,
+  useSelectorUserState,
 } from "../../redux/slices/AuthSlice";
 import { cancelCourseBundle } from "../../redux/slices/RazorpaySlice";
 
 export const Profile = () => {
   const dispatch = useDispatch();
-  const [userData, setUserData] = useState({});
+  const userData = useSelectorUserState()?.data;
   const [passData, setPassData] = useState({
     oldPassword: "",
     newPassword: "",
   });
-  const [previewImage, setPreviewImage] = useState("");
+  const [previewImage, setPreviewImage] = useState(
+    userData?.avatar?.secure_url
+  );
   const [editUserData, setEditUserData] = useState({
-    fullName: "",
+    fullName: userData?.fullName,
     avatar: "",
   });
   const change_pass = useRef();
   const edit_profile = useRef();
-
-  async function getUserProfile() {
-    const response = await dispatch(getLoggedInUser());
-    if (response?.payload?.success) {
-      setUserData(response.payload.data);
-      setEditUserData({
-        ...editUserData,
-        fullName: response.payload.data.fullName,
-      });
-      setPreviewImage(response.payload.data.avatar?.secure_url);
-    }
-  }
 
   async function onPasswordChange(e) {
     e.preventDefault();
@@ -74,8 +65,9 @@ export const Profile = () => {
     const res = await dispatch(editProfile(formData));
     if (res) {
       edit_profile.current.close();
-      getUserProfile();
+      await dispatch(getLoggedInUser());
     }
+    console.log(previewImage);
   }
 
   function getImage(e) {
@@ -105,10 +97,6 @@ export const Profile = () => {
   }
 
   useEffect(() => {
-    getUserProfile();
-  }, []);
-
-  useEffect(() => {
     if (editUserData.avatar) {
       updateProfile();
     }
@@ -130,7 +118,7 @@ export const Profile = () => {
             {previewImage || userData?.avatar?.secure_url ? (
               <img
                 src={previewImage ?? userData?.avatar?.secure_url}
-                className="w-40 h-40 m-auto rounded-full border border-black"
+                className="w-40 h-40 m-auto rounded-full border border-black object-cover"
               />
             ) : (
               <BsPersonCircle className="w-40 h-40 m-auto rounded-full border border-black" />
@@ -159,7 +147,7 @@ export const Profile = () => {
                 : "Inactive"}
             </p>
           </div>
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center justify-between gap-2 overflow-hidden">
             <span
               className="text-white btn w-1/2 bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300 rounded-sm font-semibold py-2 cursor-pointer text-center"
               onClick={() => change_pass.current.showModal()}

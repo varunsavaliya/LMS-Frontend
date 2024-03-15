@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import HomeLayout from "../../layouts/HomeLayout";
-import { getLoggedInUser } from "../../redux/slices/AuthSlice";
+import { useSelectorUserState } from "../../redux/slices/AuthSlice";
 import {
   getRazorpayId,
   purchaseCourseBundle,
@@ -12,13 +12,13 @@ import {
 import { showToaster } from "../../utils/ToasterService";
 import { BiRupee } from "react-icons/bi";
 import { CustomButton } from "../../components/shared/CustomButton";
+import { AllRoutes } from "../../constants/Routes";
 
 export const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { key, subscription_id } =
-    useSelectorRazorpayState();
-  const [user, setUser] = useState({});
+  const { key, subscription_id } = useSelectorRazorpayState();
+  const user = useSelectorUserState()?.data;
 
   const paymentDetails = {
     razorpay_payment_id: "",
@@ -27,11 +27,6 @@ export const Checkout = () => {
   };
 
   async function load() {
-    const res = dispatch(getLoggedInUser());
-    if (res?.payload?.success) {
-      setUser(response.payload.data);
-    }
-
     await dispatch(getRazorpayId());
     await dispatch(purchaseCourseBundle());
   }
@@ -66,8 +61,8 @@ export const Checkout = () => {
 
         const res = await dispatch(verifyUserPayment(paymentDetails));
         res?.payload?.success
-          ? navigate("/checkout/success")
-          : navigate("/checkout/fail");
+          ? navigate(AllRoutes.CheckoutSuccess)
+          : navigate(AllRoutes.CheckoutFail);
       },
     };
 
