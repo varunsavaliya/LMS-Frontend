@@ -26,6 +26,7 @@ import { CheckoutFailure } from "./pages/payment/CheckoutFailure";
 import { CourseLectures } from "./pages/course/CourseLectures";
 import { UserRole } from "./constants/UserRole";
 import { AddLecture } from "./pages/dashboard/AddLecture";
+import { AdminDashboard } from "./pages/dashboard/AdminDashboard";
 
 function App() {
   const [isUserStateSet, setUserStateSet] = useState(false);
@@ -63,6 +64,10 @@ function App() {
           </Route>
           <Route element={<RequireAuth allowedRoles={[UserRole.Admin]} />}>
             <Route path={AllRoutes.CreateCourse} element={<CreateCourse />} />
+            <Route
+              path={AllRoutes.AdminDashboard}
+              element={<AdminDashboard />}
+            />
           </Route>
 
           <Route

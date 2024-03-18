@@ -19,6 +19,9 @@ export const EndPoints = {
     Get: {
       GetAllCourse: "course",
     },
+    Delete: {
+      DeleteCourse: "course",
+    },
   },
   Lecture: {
     Path: "course",
@@ -30,7 +33,10 @@ export const EndPoints = {
     RazorpayId: "/payment/razorpay-key",
     PurchaseCourseBundle: "/payment/subscribe",
     VerifyPayment: "/payment/verify",
-    PaymentRecords: "/payment?count=100",
+    PaymentRecords: "/payment",
     CancelCourseBundle: "/payment/unsubscribe",
+  },
+  Stats: {
+    getStats: "stats/users",
   },
 };

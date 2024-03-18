@@ -12,6 +12,11 @@ export const Messages = {
       Courses: "Courses loading...",
       CreateCourse: "Wait! while creating course...",
       UpdateCourse: "Wait! while updating course...",
+      DeleteCourse: "Wait! while deleting course...",
+    },
+    Payment: {
+      Verify: "Wait, while verifying your payment",
+      Unsubscribe: "Unsubscribing the bundle",
     },
   },
 };

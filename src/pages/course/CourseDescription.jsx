@@ -35,7 +35,7 @@ export const CourseDescription = () => {
                   <span className="text-yellow-500 font-bold">
                     Total Lectures :{" "}
                   </span>
-                  {state?.numbersOfLectures}
+                  {state?.lectures?.length ?? 0}
                 </p>
 
                 <p className="font-semibold ">

@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { AllRoutes } from "../../constants/Routes";
+import { useSelectorUserState } from "../../redux/slices/AuthSlice";
 
 export const Denied = () => {
   const navigate = useNavigate();
+  const { isLoggedIn } = useSelectorUserState();
+  useEffect(() => {
+    if (!isLoggedIn) navigate(AllRoutes.Login);
+  }, []);
   return (
     <main className="h-screen w-full flex flex-col justify-center items-center bg-[#1A2238}">
       <h1 className="relative text-9xl font-extrabold text-white tracking-widest">
@@ -14,7 +20,7 @@ export const Denied = () => {
       <button>
         <a className="relative inline-block text-sm font-medium text-[#FF6A3D] group active:text-yellow-500 focus:outline-none focus:ring my-5">
           <span
-            onClick={() => navigate('/')}
+            onClick={() => navigate(AllRoutes.Home)}
             className="relative block px-8 py-3 bg-[#1A2238] border border-current"
           >
             Go Home

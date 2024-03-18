@@ -53,7 +53,10 @@ function HomeLayout({ children }) {
     if (isLoggedIn && role === UserRole.Admin)
       return (
         <>
-          <NavListItem title="Admin DashBoard" route="/admin/dashboard" />
+          <NavListItem
+            title="Admin Dashboard"
+            route={AllRoutes.AdminDashboard}
+          />
           <NavListItem
             title="Create new course"
             route={AllRoutes.CreateCourse}

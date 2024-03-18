@@ -34,7 +34,7 @@ export const CourseListItem = ({ details }) => {
               <span className="text-yellow-500 font-bold">
                 Total Lectures :{" "}
               </span>
-              {details?.numbersOfLectures}
+              {details?.lectures?.length ?? 0}
             </p>
             <p className="font-semibold">
               <span className="text-yellow-500 font-bold">Instructor : </span>
