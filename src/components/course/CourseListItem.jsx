@@ -6,7 +6,7 @@ import { useSelectorUserState } from "../../redux/slices/AuthSlice";
 
 export const CourseListItem = ({ details }) => {
   const navigate = useNavigate();
-  const { role, data } = useSelectorUserState();
+  const { isLoggedIn, role, data } = useSelectorUserState();
   return (
     <div className="text-white w-[17rem] sm:w-[22rem] min-h-[452px] shadow-lg rounded-lg group overflow-hidden bg-zinc-700">
       <div className="overflow-hidden ">
@@ -50,18 +50,11 @@ export const CourseListItem = ({ details }) => {
               >
                 See Course
               </button>
-              {role !== UserRole.Admin &&
-                data?.subscription?.status !== "active" && (
-                  <button
-                    onClick={() => navigate(AllRoutes.Checkout)}
-                    className="btn bg-transparent border-2 hover:bg-gray-800"
-                  >
-                    Enroll Now
-                  </button>
-                )}
-              {role === UserRole.Admin && (
+              {isLoggedIn && role === UserRole.Admin && (
                 <button
-                  onClick={() => navigate(AllRoutes.CreateCourse, {state: {...details}})}
+                  onClick={() =>
+                    navigate(AllRoutes.CreateCourse, { state: { ...details } })
+                  }
                   className="btn bg-transparent border-2 hover:bg-gray-800"
                 >
                   Edit Course

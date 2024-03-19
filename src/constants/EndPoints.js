@@ -39,4 +39,7 @@ export const EndPoints = {
   Stats: {
     getStats: "stats/users",
   },
+  Options: {
+    Users: "/user/users",
+  },
 };

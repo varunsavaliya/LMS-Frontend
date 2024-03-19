@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { CustomButton } from "../../components/shared/CustomButton";
 import { CustomInput } from "../../components/shared/CustomInput";
 import { AllRoutes } from "../../constants/Routes";
+import { UserRole } from "../../constants/UserRole";
 import { isEmailValid } from "../../helpers/regexMatcher";
 import HomeLayout from "../../layouts/HomeLayout";
 import { createAccount } from "../../redux/slices/AuthSlice";
@@ -21,6 +22,7 @@ export const SignUp = () => {
     email: "",
     password: "",
     avatar: "",
+    role: UserRole.User,
   });
 
   function handleUserInput(e) {
@@ -47,7 +49,12 @@ export const SignUp = () => {
 
   async function createNewAccount(e) {
     e.preventDefault();
-    if (!signUpData.fullName || !signUpData.email || !signUpData.password) {
+    if (
+      !signUpData.fullName ||
+      !signUpData.email ||
+      !signUpData.password ||
+      !signUpData.role
+    ) {
       toast.error("Please fill all the details");
       return;
     }
@@ -72,6 +79,7 @@ export const SignUp = () => {
     formData.append("email", signUpData.email);
     formData.append("password", signUpData.password);
     formData.append("avatar", signUpData.avatar);
+    formData.append("role", signUpData.role);
 
     const res = await dispatch(createAccount(formData));
     if (res && res.payload?.success) {
@@ -140,6 +148,27 @@ export const SignUp = () => {
             value={signUpData.password}
             type="password"
           />
+
+          <div className="flex flex-col gap-1">
+            <label htmlFor="role" className="font-semibold">
+              Select Role
+            </label>
+
+            <select
+              name="role"
+              id="role"
+              value={signUpData.role}
+              onChange={handleUserInput}
+              className="bg-transparent px-2 py-1 border rounded-lg w-full"
+            >
+              {Object.values(UserRole).map((role) => (
+                <option key={role} className="bg-gray-700 text-white" value={role}>
+                  {role}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <CustomButton title="Create Account" type="submit" />
           <p className="text-center">
             Already have an account ?{" "}

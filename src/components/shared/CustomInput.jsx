@@ -7,6 +7,7 @@ export const CustomInput = ({
   type = "text",
   value,
   onChange,
+  disabled = false,
 }) => {
   return (
     <div className="flex flex-col gap-1">
@@ -19,9 +20,10 @@ export const CustomInput = ({
         id={name}
         required
         placeholder={placeholder}
-        className="bg-transparent px-2 py-1 border rounded-lg"
+        className="bg-transparent px-2 py-1 border rounded-lg disabled:bg-gray-800"
         onChange={onChange}
         value={value}
+        disabled={disabled}
       />
     </div>
   );

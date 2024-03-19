@@ -1,12 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
+import { CourseStatus } from "../../constants/CourseStatus";
 import { EndPoints } from "../../constants/EndPoints";
 import { Messages } from "../../constants/Messages";
-import { promiseToaster } from "../../utils/ToasterService";
 import axiosInstance from "../../helpers/axiosInstance";
-import { useSelector } from "react-redux";
+import { promiseToaster } from "../../utils/ToasterService";
 
 const initialState = {
-  courses: [],
+  allCourses: [],
+  activeCourses: [],
+  userCourses: [],
 };
 
 export const getCourses = createAsyncThunk("course/get", async () => {
@@ -54,7 +57,10 @@ const courseSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getCourses.fulfilled, (state, action) => {
       if (action.payload?.success) {
-        state.courses = action.payload?.data;
+        state.allCourses = action.payload?.data;
+        state.activeCourses = action.payload?.data?.filter(
+          (course) => course.status === CourseStatus.Approved
+        );
       }
     });
   },

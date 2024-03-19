@@ -9,7 +9,7 @@ import {
 
 export const CourseList = () => {
   const dispatch = useDispatch();
-  const { courses } = useSelectorCourseState();
+  const { activeCourses } = useSelectorCourseState();
 
   async function getAllCourses() {
     await dispatch(getCourses());
@@ -27,8 +27,8 @@ export const CourseList = () => {
           <span className="font-bold text-yellow-500"> Industry Experts</span>
         </h1>
         <div className="mb-10 flex flex-wrap gap-14 justify-center items-center">
-          {!courses.length && <span>No Courses to Display</span>}
-          {courses?.map((element) => {
+          {!activeCourses.length && <span>No Courses to Display</span>}
+          {activeCourses?.map((element) => {
             return <CourseListItem key={element._id} details={element} />;
           })}
         </div>

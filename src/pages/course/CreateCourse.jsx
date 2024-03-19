@@ -1,26 +1,31 @@
-import { AllRoutes } from "../../constants/Routes";
-import { BackButton } from "../../components/shared/BackButton";
-import { createCourse, updateCourse } from "../../redux/slices/CourseSlice";
-import { CustomInput } from "../../components/shared/CustomInput";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { BackButton } from "../../components/shared/BackButton";
+import { CustomInput } from "../../components/shared/CustomInput";
+import { AllRoutes } from "../../constants/Routes";
+import { UserRole } from "../../constants/UserRole";
 import HomeLayout from "../../layouts/HomeLayout";
-import React, { useEffect, useState } from "react";
+import { useSelectorUserState } from "../../redux/slices/AuthSlice";
+import { createCourse, updateCourse } from "../../redux/slices/CourseSlice";
+import { useSelectorOptionsState } from "../../redux/slices/OptionsSlice";
 
 export const CreateCourse = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const { role, data } = useSelectorUserState();
+  const { users } = useSelectorOptionsState();
   const initialCourseState = {
     id: "",
     title: "",
     description: "",
     category: "",
-    createdBy: "",
+    createdBy: role === UserRole.Admin ? "" : data?._id,
     thumbnail: null,
     previewImage: "",
   };
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { state } = useLocation();
 
   const [courseDetails, setCourseDetails] = useState(initialCourseState);
 
@@ -158,13 +163,30 @@ export const CreateCourse = () => {
             </div>
 
             <div className="flex flex-col gap-1">
-              <CustomInput
-                label="Course instructor"
-                placeholder="Enter course instructor"
-                name="createdBy"
-                value={courseDetails.createdBy}
-                onChange={handleUserInput}
-              />
+              <div className="flex flex-col gap-1">
+                <label htmlFor="role" className="font-semibold">
+                  Select Role
+                </label>
+                <select
+                  name="createdBy"
+                  id="createdBy"
+                  onChange={handleUserInput}
+                  disabled={role !== UserRole.Admin}
+                  value={courseDetails.createdBy}
+                  className="bg-transparent px-2 py-1 border rounded-lg w-full"
+                >
+                  {users.length &&
+                    users.map((user) => (
+                      <option
+                        className="bg-gray-700 text-white"
+                        key={user._id}
+                        value={user._id}
+                      >
+                        {user.fullName}
+                      </option>
+                    ))}
+                </select>
+              </div>
               <CustomInput
                 label="Course category"
                 placeholder="Enter course category"

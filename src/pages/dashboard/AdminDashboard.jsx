@@ -11,15 +11,15 @@ import {
 import { Bar, Pie } from "react-chartjs-2";
 import { BsCollectionPlayFill, BsTrash } from "react-icons/bs";
 import {
+  getPaymentRecord,
+  useSelectorRazorpayState,
+} from "../../Redux/Slices/RazorpaySlice";
+import {
   deleteCourse,
   getCourses,
   useSelectorCourseState,
 } from "../../Redux/Slices/CourseSlice";
 import { FcSalesPerformance } from "react-icons/fc";
-import {
-  getPaymentRecord,
-  useSelectorRazorpayState,
-} from "../../Redux/Slices/RazorpaySlice";
 import {
   getStatsData,
   useSelectorStatsState,
@@ -31,6 +31,8 @@ import { useNavigate } from "react-router-dom";
 import { FaUsers } from "react-icons/fa";
 import HomeLayout from "../../Layouts/HomeLayout";
 import { AllRoutes } from "../../constants/Routes";
+import { CustomButton } from "../../components/shared/CustomButton";
+import { CourseStatus } from "../../constants/CourseStatus";
 ChartJS.register(
   ArcElement,
   BarElement,
@@ -48,7 +50,7 @@ export const AdminDashboard = () => {
   const { allUsersCount, subscribedCount } = useSelectorStatsState();
   const { allPayments, finalMonths, monthlySalesRecord } =
     useSelectorRazorpayState();
-  const { courses } = useSelectorCourseState();
+  const { allCourses } = useSelectorCourseState();
 
   const usersData = {
     labels: ["Registered Users", "Enrolled Users"],
@@ -155,15 +157,11 @@ export const AdminDashboard = () => {
             <h1 className="text-center text-3xl font-semibold">
               Courses overview
             </h1>
-
-            <button
-              onClick={() => {
-                navigate(AllRoutes.CreateCourse);
-              }}
-              className="w-fit bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-300 rounded py-2 px-4 font-semibold text-lg cursor-pointer"
-            >
-              Create new course
-            </button>
+            <CustomButton
+              title="Create new course"
+              clickHandler={() => navigate(AllRoutes.CreateCourse)}
+              width="fit"
+            />
           </div>
 
           <table className="table overflow-x-scroll">
@@ -175,11 +173,12 @@ export const AdminDashboard = () => {
                 <th>Instructor</th>
                 <th>Total Lectures</th>
                 <th>Description</th>
+                <th>status</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {courses?.map((course, idx) => {
+              {allCourses?.map((course, idx) => {
                 return (
                   <tr key={course._id}>
                     <td>{idx + 1}</td>
@@ -199,6 +198,20 @@ export const AdminDashboard = () => {
                         readOnly
                         className="w-80 h-auto bg-transparent resize-none"
                       ></textarea>
+                    </td>
+                    <td>
+                      <span
+                        className={
+                          "p-2 rounded-lg " +
+                          (CourseStatus.Approved
+                            ? " bg-green-600"
+                            : CourseStatus.Pending
+                            ? " bg-yellow-600"
+                            : " bg-red-600")
+                        }
+                      >
+                        {course?.status}
+                      </span>
                     </td>
                     <td className="flex items-center gap-4">
                       <button

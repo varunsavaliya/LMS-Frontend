@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { CustomButton } from "../components/shared/CustomButton";
 import Footer from "../components/shared/Footer";
 import { NavListItem } from "../components/shared/NavListItem";
+import { NavItems } from "../constants/NavItems";
 import { AllRoutes } from "../constants/Routes";
-import { UserRole } from "../constants/UserRole";
 import { logout, useSelectorUserState } from "../redux/slices/AuthSlice";
 
 function HomeLayout({ children }) {
@@ -14,6 +14,8 @@ function HomeLayout({ children }) {
   const navigate = useNavigate();
 
   const { isLoggedIn, role } = useSelectorUserState();
+
+  const navItems = NavItems.filter((item) => item.allowedRoles.includes(role));
 
   const getButtonsAccordingly = () => {
     if (isLoggedIn) {
@@ -48,22 +50,6 @@ function HomeLayout({ children }) {
       );
     }
   };
-
-  function getAdminNavigation() {
-    if (isLoggedIn && role === UserRole.Admin)
-      return (
-        <>
-          <NavListItem
-            title="Admin Dashboard"
-            route={AllRoutes.AdminDashboard}
-          />
-          <NavListItem
-            title="Create new course"
-            route={AllRoutes.CreateCourse}
-          />
-        </>
-      );
-  }
 
   function changeWidth() {
     const drawerSide = document.getElementsByClassName("drawer-side");
@@ -106,12 +92,13 @@ function HomeLayout({ children }) {
                 <AiFillCloseCircle size={24} />
               </button>
             </li>
-            <NavListItem title="Home" route={AllRoutes.Home} />
-            {getAdminNavigation()}
-            <NavListItem title="All Courses" route={AllRoutes.Courses} />
-            <NavListItem title="Contact Us" route={AllRoutes.Contact} />
-            <NavListItem title="About Us" route={AllRoutes.About} />
-
+            {navItems.map((item) => (
+              <NavListItem
+                key={item.title}
+                title={item.title}
+                route={item.route}
+              />
+            ))}
             <li className="absolute bottom-4 w-[90%]">
               <div className="w-full flex items-center justify-center hover:bg-transparent">
                 {getButtonsAccordingly()}

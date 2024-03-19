@@ -16,4 +16,5 @@ export const AllRoutes = {
   CourseLectures: "/course/lectures",
   AddLecture: "/course/add-lecture",
   AdminDashboard: "/admin/dashboard",
+  TutorCourses: "/tutor/courses",
 };

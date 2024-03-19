@@ -27,6 +27,7 @@ import { CourseLectures } from "./pages/course/CourseLectures";
 import { UserRole } from "./constants/UserRole";
 import { AddLecture } from "./pages/dashboard/AddLecture";
 import { AdminDashboard } from "./pages/dashboard/AdminDashboard";
+import { getAllUsers } from "./redux/slices/OptionsSlice";
 
 function App() {
   const [isUserStateSet, setUserStateSet] = useState(false);
@@ -38,6 +39,7 @@ function App() {
     };
     dispatch(updateUserState(userState));
     userState.isLoggedIn && (await dispatch(getLoggedInUser()));
+    await dispatch(getAllUsers());
     setUserStateSet(true);
   }
 
@@ -63,16 +65,25 @@ function App() {
             <Route path={AllRoutes.Login} element={<Login />} />
           </Route>
           <Route element={<RequireAuth allowedRoles={[UserRole.Admin]} />}>
-            <Route path={AllRoutes.CreateCourse} element={<CreateCourse />} />
             <Route
               path={AllRoutes.AdminDashboard}
               element={<AdminDashboard />}
             />
           </Route>
+          <Route
+            element={
+              <RequireAuth allowedRoles={[UserRole.Admin, UserRole.Tutor]} />
+            }
+          >
+            <Route path={AllRoutes.CreateCourse} element={<CreateCourse />} />
+            <Route path={AllRoutes.AddLecture} element={<AddLecture />} />
+          </Route>
 
           <Route
             element={
-              <RequireAuth allowedRoles={[UserRole.Admin, UserRole.User]} />
+              <RequireAuth
+                allowedRoles={[UserRole.Admin, UserRole.User, UserRole.Tutor]}
+              />
             }
           >
             <Route path={AllRoutes.UserProfile} element={<Profile />} />
@@ -89,7 +100,6 @@ function App() {
               path={AllRoutes.CourseLectures}
               element={<CourseLectures />}
             />
-            <Route path={AllRoutes.AddLecture} element={<AddLecture />} />
           </Route>
 
           <Route path={AllRoutes.Denied} element={<Denied />}></Route>

@@ -1,15 +1,17 @@
-import { AllRoutes } from "../../constants/Routes";
-import { BackButton } from "../../components/shared/BackButton";
-import { useLocation, useNavigate } from "react-router-dom";
-import { UserRole } from "../../constants/UserRole";
-import { useSelectorUserState } from "../../redux/slices/AuthSlice";
-import HomeLayout from "../../layouts/HomeLayout";
 import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { BackButton } from "../../components/shared/BackButton";
+import { AllRoutes } from "../../constants/Routes";
+import { UserRole } from "../../constants/UserRole";
+import HomeLayout from "../../layouts/HomeLayout";
+import { useSelectorUserState } from "../../redux/slices/AuthSlice";
+import { useSelectorOptionsState } from "../../redux/slices/OptionsSlice";
 
 export const CourseDescription = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const { isLoggedIn, role, data } = useSelectorUserState();
+  const { users } = useSelectorOptionsState();
 
   useEffect(() => {
     if (!state?.title) navigate(AllRoutes.Courses);
@@ -42,11 +44,11 @@ export const CourseDescription = () => {
                   <span className="text-yellow-500 font-bold">
                     Instructor :{" "}
                   </span>
-                  {state?.createdBy}
+                  {users.find((u) => u._id === state?.createdBy)?.fullName}
                 </p>
-
                 {role === UserRole.Admin ||
-                data?.subscription?.status === "active" ? (
+                data?.subscription?.status === "active" ||
+                data?._id === state?.createdBy ? (
                   <button
                     onClick={() =>
                       navigate(AllRoutes.CourseLectures, {

@@ -16,6 +16,7 @@ export const CourseLectures = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { state } = useLocation();
+  const { data } = useSelectorUserState();
   const { lectures } = useSelectorLectureState();
   const { role } = useSelectorUserState();
 
@@ -35,7 +36,6 @@ export const CourseLectures = () => {
   }
 
   useEffect(() => {
-    console.log(state);
     if (!state) navigate(AllRoutes.Courses);
     fetchCourseLectures();
   }, []);
@@ -81,18 +81,19 @@ export const CourseLectures = () => {
             <div className="flex flex-col w-[28rem] p-3 rounded-lg shadow-[0_0_10px_black] gap-y-3">
               <div className="font-semibold text-xl text-yellow-500 flex items-center justify-between">
                 <p>Lectures list</p>
-                {role === UserRole.Admin && (
-                  <button
-                    onClick={() =>
-                      navigate(AllRoutes.AddLecture, {
-                        state: { courseDetails: state },
-                      })
-                    }
-                    className="btn btn-info px-3 py-1 rounded-md font-semibold text-sm"
-                  >
-                    Add new lecture
-                  </button>
-                )}
+                {role === UserRole.Admin ||
+                  (data?._id === state.createdBy && (
+                    <button
+                      onClick={() =>
+                        navigate(AllRoutes.AddLecture, {
+                          state: { courseDetails: state },
+                        })
+                      }
+                      className="btn btn-info px-3 py-1 rounded-md font-semibold text-sm"
+                    >
+                      Add new lecture
+                    </button>
+                  ))}
               </div>
               <ul className="flex flex-col gap-y-3 max-h-[400px] overflow-y-auto">
                 {lectures &&
@@ -109,7 +110,8 @@ export const CourseLectures = () => {
                           <span> Lecture {idx + 1} : </span>
                           {lecture?.title}
                         </p>
-                        {role === UserRole.Admin && (
+                        {(role === UserRole.Admin ||
+                          data?._id === state.createdBy) && (
                           <div className="flex justify-between items-center w-full py-1">
                             <button
                               onClick={() =>
@@ -141,7 +143,8 @@ export const CourseLectures = () => {
             </div>
           </div>
         ) : (
-          role === UserRole.Admin && (
+          role === UserRole.Admin ||
+          (data?._id === state.createdBy && (
             <button
               onClick={() =>
                 navigate(AllRoutes.AddLecture, {
@@ -152,7 +155,7 @@ export const CourseLectures = () => {
             >
               Add new lecture
             </button>
-          )
+          ))
         )}
       </div>
     </HomeLayout>
