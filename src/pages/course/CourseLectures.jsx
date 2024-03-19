@@ -81,19 +81,18 @@ export const CourseLectures = () => {
             <div className="flex flex-col w-[28rem] p-3 rounded-lg shadow-[0_0_10px_black] gap-y-3">
               <div className="font-semibold text-xl text-yellow-500 flex items-center justify-between">
                 <p>Lectures list</p>
-                {role === UserRole.Admin ||
-                  (data?._id === state.createdBy && (
-                    <button
-                      onClick={() =>
-                        navigate(AllRoutes.AddLecture, {
-                          state: { courseDetails: state },
-                        })
-                      }
-                      className="btn btn-info px-3 py-1 rounded-md font-semibold text-sm"
-                    >
-                      Add new lecture
-                    </button>
-                  ))}
+                {(role === UserRole.Admin || data?._id === state.createdBy) && (
+                  <button
+                    onClick={() =>
+                      navigate(AllRoutes.AddLecture, {
+                        state: { courseDetails: state },
+                      })
+                    }
+                    className="btn btn-info px-3 py-1 rounded-md font-semibold text-sm"
+                  >
+                    Add new lecture
+                  </button>
+                )}
               </div>
               <ul className="flex flex-col gap-y-3 max-h-[400px] overflow-y-auto">
                 {lectures &&
@@ -143,8 +142,7 @@ export const CourseLectures = () => {
             </div>
           </div>
         ) : (
-          role === UserRole.Admin ||
-          (data?._id === state.createdBy && (
+          (role === UserRole.Admin || data?._id === state.createdBy) && (
             <button
               onClick={() =>
                 navigate(AllRoutes.AddLecture, {
@@ -155,7 +153,7 @@ export const CourseLectures = () => {
             >
               Add new lecture
             </button>
-          ))
+          )
         )}
       </div>
     </HomeLayout>

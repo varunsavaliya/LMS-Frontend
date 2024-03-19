@@ -28,6 +28,7 @@ import { UserRole } from "./constants/UserRole";
 import { AddLecture } from "./pages/dashboard/AddLecture";
 import { AdminDashboard } from "./pages/dashboard/AdminDashboard";
 import { getAllUsers } from "./redux/slices/OptionsSlice";
+import { TutorDashboard } from "./pages/dashboard/TutorDashboard";
 
 function App() {
   const [isUserStateSet, setUserStateSet] = useState(false);
@@ -77,6 +78,9 @@ function App() {
           >
             <Route path={AllRoutes.CreateCourse} element={<CreateCourse />} />
             <Route path={AllRoutes.AddLecture} element={<AddLecture />} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={[UserRole.Tutor]} />}>
+            <Route path={AllRoutes.TutorCourses} element={<TutorDashboard />} />
           </Route>
 
           <Route

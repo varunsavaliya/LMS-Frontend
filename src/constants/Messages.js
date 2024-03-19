@@ -13,6 +13,7 @@ export const Messages = {
       CreateCourse: "Wait! while creating course...",
       UpdateCourse: "Wait! while updating course...",
       DeleteCourse: "Wait! while deleting course...",
+      TutorCourses: "Wait! while fetching your course...",
     },
     Payment: {
       Verify: "Wait, while verifying your payment",

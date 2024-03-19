@@ -9,13 +9,11 @@ import {
   Tooltip,
 } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
-import { BsCollectionPlayFill, BsTrash } from "react-icons/bs";
 import {
   getPaymentRecord,
   useSelectorRazorpayState,
 } from "../../Redux/Slices/RazorpaySlice";
 import {
-  deleteCourse,
   getCourses,
   useSelectorCourseState,
 } from "../../Redux/Slices/CourseSlice";
@@ -32,7 +30,7 @@ import { FaUsers } from "react-icons/fa";
 import HomeLayout from "../../Layouts/HomeLayout";
 import { AllRoutes } from "../../constants/Routes";
 import { CustomButton } from "../../components/shared/CustomButton";
-import { CourseStatus } from "../../constants/CourseStatus";
+import { CourseTable } from "../../components/course/CourseTable";
 ChartJS.register(
   ArcElement,
   BarElement,
@@ -79,15 +77,6 @@ export const AdminDashboard = () => {
     ],
   };
 
-  async function handleCourseDelete(id) {
-    if (window.confirm("Are you sure you want to delete this course ?")) {
-      const res = await dispatch(deleteCourse(id));
-      if (res.payload?.success) {
-        await dispatch(getCourses());
-      }
-    }
-  }
-
   useEffect(() => {
     (async () => {
       await dispatch(getCourses());
@@ -97,7 +86,7 @@ export const AdminDashboard = () => {
   }, []);
   return (
     <HomeLayout>
-      <div className="min-h-[90vh] pt-5 flex flex-col flex-wrap gap-10 text-white">
+      <div className="container m-auto min-h-[90vh] pt-5 flex flex-col flex-wrap gap-10 text-white">
         <h1 className="text-center text-5xl font-semibold text-yellow-500">
           Admin Dashboard
         </h1>
@@ -152,7 +141,7 @@ export const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="mx-[10%] w-[80%] self-center flex flex-col items-center justify-center gap-10 mb-10">
+        <div className="self-center flex flex-col items-center justify-center gap-10 mb-10">
           <div className="flex w-full items-center justify-between">
             <h1 className="text-center text-3xl font-semibold">
               Courses overview
@@ -164,78 +153,7 @@ export const AdminDashboard = () => {
             />
           </div>
 
-          <table className="table overflow-x-scroll">
-            <thead>
-              <tr>
-                <th>S No</th>
-                <th>Course Title</th>
-                <th>Course Category</th>
-                <th>Instructor</th>
-                <th>Total Lectures</th>
-                <th>Description</th>
-                <th>status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {allCourses?.map((course, idx) => {
-                return (
-                  <tr key={course._id}>
-                    <td>{idx + 1}</td>
-                    <td>
-                      <textarea
-                        readOnly
-                        value={course?.title}
-                        className="w-40 h-auto bg-transparent resize-none"
-                      ></textarea>
-                    </td>
-                    <td>{course?.category}</td>
-                    <td>{course?.createdBy}</td>
-                    <td>{course?.lectures?.length ?? 0}</td>
-                    <td className="max-w-28 overflow-hidden text-ellipsis whitespace-nowrap">
-                      <textarea
-                        value={course?.description}
-                        readOnly
-                        className="w-80 h-auto bg-transparent resize-none"
-                      ></textarea>
-                    </td>
-                    <td>
-                      <span
-                        className={
-                          "p-2 rounded-lg " +
-                          (CourseStatus.Approved
-                            ? " bg-green-600"
-                            : CourseStatus.Pending
-                            ? " bg-yellow-600"
-                            : " bg-red-600")
-                        }
-                      >
-                        {course?.status}
-                      </span>
-                    </td>
-                    <td className="flex items-center gap-4">
-                      <button
-                        className="bg-green-500 hover:bg-green-600 transition-all ease-in-out duration-300 text-xl py-2 px-4 rounded-md font-bold"
-                        onClick={() =>
-                          navigate(AllRoutes.CourseLectures, {
-                            state: { ...course },
-                          })
-                        }
-                      >
-                        <BsCollectionPlayFill />
-                      </button>
-                      <button
-                        className="bg-red-500 hover:bg-red-600 transition-all ease-in-out duration-300 text-xl py-2 px-4 rounded-md font-bold"
-                        onClick={() => handleCourseDelete(course?._id)}
-                      >
-                        <BsTrash />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <CourseTable courses={allCourses} />
         </div>
       </div>
     </HomeLayout>

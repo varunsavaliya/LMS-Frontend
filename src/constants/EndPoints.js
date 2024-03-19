@@ -12,12 +12,14 @@ export const EndPoints = {
     },
   },
   Course: {
+    Path: "course",
     Post: {
       Create: "course",
       Update: "course",
     },
     Get: {
       GetAllCourse: "course",
+      TutorCourses: "mycourses",
     },
     Delete: {
       DeleteCourse: "course",

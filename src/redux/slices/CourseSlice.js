@@ -9,7 +9,7 @@ import { promiseToaster } from "../../utils/ToasterService";
 const initialState = {
   allCourses: [],
   activeCourses: [],
-  userCourses: [],
+  tutorCourses: [],
 };
 
 export const getCourses = createAsyncThunk("course/get", async () => {
@@ -50,19 +50,35 @@ export const deleteCourse = createAsyncThunk("course/delete", async (data) => {
   return (await res).data;
 });
 
+export const getTutorCourses = createAsyncThunk("tutor/course", async () => {
+  const res = promiseToaster(
+    axiosInstance.get(
+      `${EndPoints.Course.Path}/${EndPoints.Course.Get.TutorCourses}`
+    ),
+    Messages.Loading.Course.TutorCourses
+  );
+  return (await res).data;
+});
+
 const courseSlice = createSlice({
   name: "course",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getCourses.fulfilled, (state, action) => {
-      if (action.payload?.success) {
-        state.allCourses = action.payload?.data;
-        state.activeCourses = action.payload?.data?.filter(
-          (course) => course.status === CourseStatus.Approved
-        );
-      }
-    });
+    builder
+      .addCase(getCourses.fulfilled, (state, action) => {
+        if (action.payload?.success) {
+          state.allCourses = action.payload?.data;
+          state.activeCourses = action.payload?.data?.filter(
+            (course) => course.status === CourseStatus.Approved
+          );
+        }
+      })
+      .addCase(getTutorCourses.fulfilled, (state, action) => {
+        if (action.payload?.success) {
+          state.tutorCourses = action.payload?.data;
+        }
+      });
   },
 });
 
