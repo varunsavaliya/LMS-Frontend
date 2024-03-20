@@ -19,7 +19,7 @@ export const CourseDescription = () => {
 
   return (
     <HomeLayout>
-      <div className="container m-auto min-h-[90vh] pt-12 md:px-5 px-9 flex flex-col justify-center items-center text-white">
+      <div className="container-wrapper flex flex-col justify-center items-center text-white">
         <div className="flex justify-center items-center gap-5">
           <BackButton route={AllRoutes.Courses} />
           <h1 className="text-3xl font-bold text-yellow-500">{state?.title}</h1>

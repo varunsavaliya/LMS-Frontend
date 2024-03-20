@@ -9,6 +9,7 @@ import {
   updateCourseLectures,
 } from "../../redux/slices/LectureSlice";
 import { BackButton } from "../../components/shared/BackButton";
+import { FileExtensions } from "../../constants/FileExtensions";
 
 export const AddLecture = () => {
   const { courseDetails, lectureDetails } = useLocation().state;
@@ -34,6 +35,12 @@ export const AddLecture = () => {
 
   function handleVideo(e) {
     const video = e.target.files[0];
+    const fileName = video.name;
+    const fileExtension = fileName.split(".").pop().toLowerCase();
+    if (!FileExtensions.Lecture.includes(fileExtension)) {
+      showToaster("error", "Invalid file format");
+      return;
+    }
     const source = window.URL.createObjectURL(video);
     setUserInput({
       ...userInput,
@@ -85,7 +92,7 @@ export const AddLecture = () => {
 
   return (
     <HomeLayout>
-      <div className="min-h-[90vh] text-white flex flex-col items-center justify-center gap-10 mx-16">
+      <div className="container-wrapper text-white flex flex-col items-center justify-center gap-10">
         <div className="flex flex-col gap-5 p-2 shadow-[0_0_10px_black] w-96 rounded-lg">
           <header className="flex items-center justify-start gap-5">
             <BackButton
@@ -146,7 +153,7 @@ export const AddLecture = () => {
               id="lecture"
               name="lecture"
               onChange={handleVideo}
-              accept="video/mp4 video/x-mp4 video/*"
+              accept=".mp4"
             />
             <button
               type="submit"

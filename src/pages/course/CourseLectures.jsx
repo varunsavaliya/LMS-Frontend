@@ -41,7 +41,7 @@ export const CourseLectures = () => {
   }, []);
   return (
     <HomeLayout>
-      <div className="flex flex-col gap-10 items-center justify-center min-h-[90vh] py-10 text-white mx-[5%]">
+      <div className="flex flex-col gap-10 items-center justify-center container-wrapper text-white">
         <div className="flex justify-center items-center gap-5">
           <BackButton route={AllRoutes.CourseDescription} state={state} />
           <div className="text-center text-2xl font-semibold text-yellow-500">
@@ -54,7 +54,7 @@ export const CourseLectures = () => {
         {lectures && lectures.length ? (
           <div className="flex justify-center gap-10 w-full">
             {/* left section for playing videos and displaying course details to admin */}
-            <div className="space-y-5 w-[28rem] p-2 rounded-lg shadow-[0_0_10px_black]">
+            <div className="space-y-5 w-1/2 p-2 rounded-lg shadow-[0_0_10px_black]">
               <video
                 src={lectures && lectures[currentVideo]?.lecture?.secure_url}
                 className="object-fill rounded-tl-lg rounded-tr-lg w-full"
@@ -94,7 +94,7 @@ export const CourseLectures = () => {
                   </button>
                 )}
               </div>
-              <ul className="flex flex-col gap-y-3 max-h-[400px] overflow-y-auto">
+              <ul className="flex flex-col gap-y-3 max-h-[428px] overflow-y-auto">
                 {lectures &&
                   lectures.map((lecture, idx) => {
                     return (

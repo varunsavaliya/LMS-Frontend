@@ -2,7 +2,10 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import HomeLayout from "../../layouts/HomeLayout";
-import { useSelectorUserState } from "../../redux/slices/AuthSlice";
+import {
+  getLoggedInUser,
+  useSelectorUserState,
+} from "../../redux/slices/AuthSlice";
 import {
   getRazorpayId,
   purchaseCourseBundle,
@@ -60,9 +63,12 @@ export const Checkout = () => {
         showToaster("success", "Payment successful");
 
         const res = await dispatch(verifyUserPayment(paymentDetails));
-        res?.payload?.success
-          ? navigate(AllRoutes.CheckoutSuccess)
-          : navigate(AllRoutes.CheckoutFail);
+        if (res?.payload?.success) {
+          await dispatch(getLoggedInUser());
+          navigate(AllRoutes.CheckoutSuccess);
+        } else {
+          navigate(AllRoutes.CheckoutFail);
+        }
       },
     };
 

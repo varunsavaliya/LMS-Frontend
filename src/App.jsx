@@ -52,7 +52,7 @@ function App() {
     <>
       {isUserStateSet && (
         <Routes>
-          <Route path={AllRoutes.Home} element={<HomePage />}></Route>
+          <Route exact path={AllRoutes.Home} element={<HomePage />}></Route>
           <Route path={AllRoutes.About} element={<AboutUs />}></Route>
           <Route path={AllRoutes.Contact} element={<ContactUs />}></Route>
           <Route path={AllRoutes.Courses} element={<CourseList />}></Route>

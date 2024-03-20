@@ -11,6 +11,8 @@ import {
   useSelectorUserState,
 } from "../../redux/slices/AuthSlice";
 import { cancelCourseBundle } from "../../redux/slices/RazorpaySlice";
+import { FileExtensions } from "../../constants/FileExtensions";
+import { showToaster } from "../../utils/ToasterService";
 
 export const Profile = () => {
   const dispatch = useDispatch();
@@ -52,7 +54,7 @@ export const Profile = () => {
     e && e.preventDefault();
 
     if (editUserData?.fullName?.length < 5) {
-      toast.error("Name should be at least 5 characters");
+      showToaster("error", "Name should be at least 5 characters");
       return;
     }
 
@@ -61,18 +63,24 @@ export const Profile = () => {
     const formData = new FormData();
     formData.append("fullName", editUserData.fullName);
     formData.append("avatar", editUserData.avatar);
-    console.log("profile", editUserData.avatar);
     const res = await dispatch(editProfile(formData));
-    if (res) {
+    if (res?.payload?.success) {
       edit_profile.current.close();
       await dispatch(getLoggedInUser());
+    } else {
+      setPreviewImage(userData?.avatar?.secure_url);
     }
-    console.log(previewImage);
   }
 
   function getImage(e) {
     e.preventDefault();
     const uploadedImage = e.target.files[0];
+    const fileName = uploadedImage.name;
+    const fileExtension = fileName.split(".").pop().toLowerCase();
+    if (!FileExtensions.Profile.includes(fileExtension)) {
+      showToaster("error", "Invalid file format");
+      return;
+    }
     if (uploadedImage) {
       setEditUserData({
         ...editUserData,
@@ -83,6 +91,7 @@ export const Profile = () => {
       fileReader.onload = function () {
         setPreviewImage(fileReader.result);
       };
+      e.target.value = "";
     }
   }
 
@@ -104,12 +113,11 @@ export const Profile = () => {
 
   async function handleCancellation() {
     await dispatch(cancelCourseBundle());
-    getUserProfile();
   }
 
   return (
     <HomeLayout>
-      <div className="container pt-10 md:px-5 px-9 text-white flex items-center justify-center gap-10 m-auto h-[90vh]">
+      <div className="container-wrapper text-white flex items-center justify-center gap-10">
         <div className="my-10 flex flex-col gap-4 rounded-lg p-4 text-white w-96 shadow-[0_0_10px_black]">
           <label
             htmlFor="image_uploads"
@@ -130,7 +138,7 @@ export const Profile = () => {
             type="file"
             id="image_uploads"
             name="image_uploads"
-            accept=".jpg, .jpeg, .png,.svg"
+            accept=".jpg, .jpeg, .png"
           />
           <h3 className="text-xl font-semibold text-center capitalize">
             {userData?.fullName}

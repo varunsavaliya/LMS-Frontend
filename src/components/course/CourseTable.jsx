@@ -31,8 +31,8 @@ export const CourseTable = ({ courses }) => {
     return classes;
   }
   return (
-    <div className="overflow-x-auto">
-      <table className="table text-white">
+    <div className="overflow-auto w-full">
+      <table className="table table-pin-rows text-white">
         <thead>
           <tr>
             <th>S No</th>

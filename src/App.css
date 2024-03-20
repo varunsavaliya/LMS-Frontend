@@ -21,3 +21,7 @@
   border-radius: 20px;
   background: #555;
 }
+
+.container-wrapper{
+  min-height: inherit;
+}

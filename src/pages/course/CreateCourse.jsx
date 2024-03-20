@@ -52,7 +52,6 @@ export const CreateCourse = () => {
 
   async function onFormSubmit(e) {
     e.preventDefault();
-    console.log(courseDetails);
     if (
       !courseDetails.title ||
       !courseDetails.description ||
@@ -110,11 +109,12 @@ export const CreateCourse = () => {
     if (state?._id) {
       setStateInCourseDetails();
     }
+    console.log(courseDetails);
   }, []);
 
   return (
     <HomeLayout>
-      <div className="container flex items-center justify-center h-[90vh] m-auto px-5 sm:px-0">
+      <div className="container-wrapper flex items-center justify-center px-5 sm:px-0">
         <form
           onSubmit={onFormSubmit}
           className="flex flex-col justify-center gap-5 rounded-lg p-4 text-white w-[700px] my-10 shadow-[0_0_10px_black] relative"
@@ -165,7 +165,7 @@ export const CreateCourse = () => {
             <div className="flex flex-col gap-1">
               <div className="flex flex-col gap-1">
                 <label htmlFor="role" className="font-semibold">
-                  Select Role
+                  Select Instructor
                 </label>
                 <select
                   name="createdBy"

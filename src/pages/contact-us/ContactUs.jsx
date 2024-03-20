@@ -56,7 +56,7 @@ export const ContactUs = () => {
 
   return (
     <HomeLayout>
-      <div className="container flex items-center justify-center h-[90vh] m-auto px-5 sm:px-0">
+      <div className="container-wrapper flex items-center justify-center">
         <form
           onSubmit={handleContact}
           className="flex flex-col justify-center items-center gap-3 rounded-lg p-4 text-white w-96 shadow-[0_0_10px_black] mt-9 sm:mt-0"

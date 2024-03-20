@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { AllRoutes } from "../../constants/Routes";
 import { UserRole } from "../../constants/UserRole";
 import { useSelectorUserState } from "../../redux/slices/AuthSlice";
+import { useSelectorOptionsState } from "../../redux/slices/OptionsSlice";
 
 export const CourseListItem = ({ details }) => {
   const navigate = useNavigate();
   const { isLoggedIn, role, data } = useSelectorUserState();
+  const { users } = useSelectorOptionsState();
   return (
     <div className="text-white w-[17rem] sm:w-[22rem] min-h-[452px] shadow-lg rounded-lg group overflow-hidden bg-zinc-700">
       <div className="overflow-hidden ">
@@ -38,7 +40,7 @@ export const CourseListItem = ({ details }) => {
             </p>
             <p className="font-semibold">
               <span className="text-yellow-500 font-bold">Instructor : </span>
-              {details?.createdBy}
+              {users.find((u) => u._id === details?.createdBy)?.fullName}
             </p>
 
             <div className="flex justify-between items-center">
@@ -50,16 +52,20 @@ export const CourseListItem = ({ details }) => {
               >
                 See Course
               </button>
-              {isLoggedIn && role === UserRole.Admin && (
-                <button
-                  onClick={() =>
-                    navigate(AllRoutes.CreateCourse, { state: { ...details } })
-                  }
-                  className="btn bg-transparent border-2 hover:bg-gray-800"
-                >
-                  Edit Course
-                </button>
-              )}
+              {isLoggedIn &&
+                (role === UserRole.Admin ||
+                  details?.createdBy === data?._id) && (
+                  <button
+                    onClick={() =>
+                      navigate(AllRoutes.CreateCourse, {
+                        state: { ...details },
+                      })
+                    }
+                    className="btn bg-transparent border-2 hover:bg-gray-800"
+                  >
+                    Edit Course
+                  </button>
+                )}
             </div>
           </div>
         </div>

@@ -68,7 +68,6 @@ export const deleteCourseLectures = createAsyncThunk(
       ),
       "Deleting course lecture"
     );
-    console.log((await res).data);
     return (await res).data;
   }
 );

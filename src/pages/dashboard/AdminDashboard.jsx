@@ -86,7 +86,7 @@ export const AdminDashboard = () => {
   }, []);
   return (
     <HomeLayout>
-      <div className="container m-auto min-h-[90vh] pt-5 flex flex-col flex-wrap gap-10 text-white">
+      <div className="container-wrapper flex flex-col flex-wrap gap-10 pt-5 text-white">
         <h1 className="text-center text-5xl font-semibold text-yellow-500">
           Admin Dashboard
         </h1>
@@ -141,7 +141,7 @@ export const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="self-center flex flex-col items-center justify-center gap-10 mb-10">
+        <div className="w-full self-center flex flex-col items-center justify-center gap-10 mb-10">
           <div className="flex w-full items-center justify-between">
             <h1 className="text-center text-3xl font-semibold">
               Courses overview
