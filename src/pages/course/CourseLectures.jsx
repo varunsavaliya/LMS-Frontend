@@ -41,9 +41,9 @@ export const CourseLectures = () => {
   }, []);
   return (
     <HomeLayout>
-      <div className="flex flex-col gap-10 items-center justify-center container-wrapper text-white">
+      <div className="container-wrapper flex-col gap-10 text-white">
         <div className="flex justify-center items-center gap-5">
-          <BackButton route={AllRoutes.CourseDescription} state={state} />
+          <BackButton state={state} />
           <div className="text-center text-2xl font-semibold text-yellow-500">
             Course Name: {state?.title}
           </div>

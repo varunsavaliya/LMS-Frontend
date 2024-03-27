@@ -7,7 +7,7 @@ import aboutMainImage from "../../assets/images/aboutMainImage.png";
 export default function AboutUs() {
   return (
     <HomeLayout>
-      <div className="container-wrapper pt-20 flex flex-col text-white">
+      <div className="container-wrapper text-white">
         <div className="flex justify-between items-center max-10">
           <section className="w-full lg:w-1/2 text-center lg:text-left space-y-10">
             <h1 className="text-5xl text-yellow-500 font-semibold">

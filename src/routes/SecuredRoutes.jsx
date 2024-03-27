@@ -1,7 +1,6 @@
 import { AllRoutes } from "../constants/Routes";
 import { AuthRedirect } from "../components/auth/AuthRedirect";
 import { Checkout } from "../pages/payment/Checkout";
-import { CheckoutFailure } from "../pages/payment/CheckoutFailure";
 import { CheckoutSuccess } from "../pages/payment/CheckoutSuccess";
 import { CreateCourse } from "../pages/course/CreateCourse";
 import { Login } from "../pages/login/Login";
@@ -38,10 +37,6 @@ export const SecuredRoutes = () => {
             <Route
               path={AllRoutes.CheckoutSuccess}
               element={<CheckoutSuccess />}
-            ></Route>
-            <Route
-              path={AllRoutes.CheckoutFail}
-              element={<CheckoutFailure />}
             ></Route>
             <Route
               path={AllRoutes.CourseLectures}

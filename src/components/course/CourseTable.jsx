@@ -1,28 +1,30 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { CourseModificationOptions } from "./CourseModificationOptions";
 import { CourseStatus } from "../../constants/CourseStatus";
+import { getCourses, updateCourse } from "../../redux/slices/CourseSlice";
+import { useDispatch } from "react-redux";
+import { UserRole } from "../../constants/UserRole";
+import { useSelectorOptionsState } from "../../redux/slices/OptionsSlice";
+import { useSelectorUserState } from "../../redux/slices/AuthSlice";
+import { CustomButton } from "../shared/CustomButton";
+import { useNavigate } from "react-router-dom";
 import { AllRoutes } from "../../constants/Routes";
-import {
-  deleteCourse,
-  getCourses,
-  getTutorCourses,
-} from "../../redux/slices/CourseSlice";
-import { useSelectorOptionsState } from "../../Redux/Slices/OptionsSlice";
 
 export const CourseTable = ({ courses }) => {
   const { users } = useSelectorOptionsState();
-  const navigate = useNavigate();
+  const { role } = useSelectorUserState();
   const dispatch = useDispatch();
-  async function handleCourseDelete(id) {
-    if (window.confirm("Are you sure you want to delete this course ?")) {
-      const res = await dispatch(deleteCourse(id));
-      if (res.payload?.success) {
-        await dispatch(getCourses());
-        await dispatch(getTutorCourses());
-      }
+  const navigate = useNavigate();
+
+  async function handleChangeStatus(event, id) {
+    const formData = new FormData();
+    formData.append("id", id);
+    formData.append("status", event.target.value);
+    const res = await dispatch(updateCourse(formData));
+    if (res.payload?.success) {
+      await dispatch(getCourses());
     }
   }
+
   function getClassesForCourseStatus(status) {
     let classes = "p-2 rounded-lg ";
     if (status === CourseStatus.Approved) classes += "bg-green-600 ";
@@ -30,89 +32,86 @@ export const CourseTable = ({ courses }) => {
     else if (status === CourseStatus.Declined) classes += "bg-red-600 ";
     return classes;
   }
+
+  function getClassesForCourseStatusSelect(status) {
+    let classes = "select w-max select-xs ";
+    if (status === CourseStatus.Approved) classes += "select-success ";
+    else if (status === CourseStatus.Pending) classes += "select-warning ";
+    else if (status === CourseStatus.Declined) classes += "select-error ";
+    return classes;
+  }
+
   return (
-    <div className="overflow-auto w-full">
-      <table className="table table-pin-rows text-white">
-        <thead>
-          <tr>
-            <th>S No</th>
-            <th>Course Title</th>
-            <th>Course Category</th>
-            <th>Instructor</th>
-            <th>Total Lectures</th>
-            <th>Description</th>
-            <th>status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {courses?.map((course, idx) => {
-            return (
-              <tr key={course._id}>
-                <td>{idx + 1}</td>
-                <td className="max-w-xs truncate">{course?.title}</td>
-                <td>{course?.category}</td>
-                <td>
-                  {users.find((u) => u._id === course?.createdBy)?.fullName}
-                </td>
-                <td>{course?.lectures?.length ?? 0}</td>
-                <td className="max-w-xs truncate">{course?.description}</td>
-                <td>
-                  <span className={getClassesForCourseStatus(course?.status)}>
-                    {course?.status}
-                  </span>
-                </td>
-                <td className="flex items-center gap-4">
-                  <div className="dropdown dropdown-bottom dropdown-end">
-                    <div
-                      tabIndex={0}
-                      role="button"
-                      className="after:content-['\2807'] text-2xl"
-                    ></div>
-                    <ul
-                      tabIndex={0}
-                      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-                    >
-                      <li>
-                        <button
-                          className="rounded-md font-semibold"
-                          onClick={() =>
-                            navigate(AllRoutes.CourseDescription, {
-                              state: { ...course },
-                            })
-                          }
-                        >
-                          See Course
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="rounded-md font-semibold"
-                          onClick={() =>
-                            navigate(AllRoutes.CourseLectures, {
-                              state: { ...course },
-                            })
-                          }
-                        >
-                          See Lectures
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="rounded-md font-semibold"
-                          onClick={() => handleCourseDelete(course?._id)}
-                        >
-                          Delete Course
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+    <div className="w-full self-center flex flex-col items-center justify-center gap-10 mb-10">
+      <div className="flex w-full items-center justify-between text-white">
+        <h1 className="text-center text-3xl font-semibold">Courses overview</h1>
+        <CustomButton
+          title="Create new course"
+          clickHandler={() => navigate(AllRoutes.CreateCourse)}
+          width="fit"
+        />
+      </div>
+      <div className="w-full">
+        <table className="table table-pin-rows text-white max-h-min">
+          <thead>
+            <tr>
+              <th>S No</th>
+              <th>Course Title</th>
+              <th>Course Category</th>
+              <th>Instructor</th>
+              <th>Total Lectures</th>
+              <th>Description</th>
+              <th>status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {courses?.map((course, idx) => {
+              return (
+                <tr key={course._id}>
+                  <td>{idx + 1}</td>
+                  <td className="max-w-xs truncate">{course?.title}</td>
+                  <td>{course?.category}</td>
+                  <td>
+                    {users.find((u) => u._id === course?.createdBy)?.fullName}
+                  </td>
+                  <td>{course?.lectures?.length ?? 0}</td>
+                  <td className="max-w-xs truncate">{course?.description}</td>
+                  <td>
+                    {role === UserRole.Admin ? (
+                      <select
+                        value={course?.status}
+                        className={getClassesForCourseStatusSelect(
+                          course?.status
+                        )}
+                        onChange={($event) =>
+                          handleChangeStatus($event, course?._id)
+                        }
+                      >
+                        <option disabled>Change Status</option>
+                        {Object.values(CourseStatus).map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <span
+                        className={getClassesForCourseStatus(course?.status)}
+                      >
+                        {course?.status}
+                      </span>
+                    )}
+                  </td>
+                  <td className="flex items-center gap-4">
+                    <CourseModificationOptions course={course} />
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

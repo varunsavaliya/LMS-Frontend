@@ -12,7 +12,6 @@ export const AllRoutes = {
   NotFound: "*",
   Checkout: "/checkout",
   CheckoutSuccess: "/checkout/success",
-  CheckoutFail: "/checkout/fail",
   CourseLectures: "/course/lectures",
   AddLecture: "/course/add-lecture",
   AdminDashboard: "/admin/dashboard",

@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import { AllRoutes } from "../../constants/Routes";
-import HomeLayout from "../../layouts/HomeLayout";
-import { showToaster } from "../../utils/ToasterService";
 import {
   addCourseLectures,
   updateCourseLectures,
 } from "../../redux/slices/LectureSlice";
+import { AllRoutes } from "../../constants/Routes";
 import { BackButton } from "../../components/shared/BackButton";
 import { FileExtensions } from "../../constants/FileExtensions";
+import { isEqual } from "lodash";
+import { Messages } from "../../constants/Messages";
+import { showToaster } from "../../utils/ToasterService";
+import { ToasterType } from "../../constants/ToasterType";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useStateHandler } from "../../hooks/shared/useStateHandler";
+import HomeLayout from "../../layouts/HomeLayout";
 
 export const AddLecture = () => {
   const { courseDetails, lectureDetails } = useLocation().state;
@@ -17,7 +21,7 @@ export const AddLecture = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [userInput, setUserInput] = useState({
+  const [userInput, handleInputChange, setUserInput] = useStateHandler({
     id: courseDetails?._id,
     lecture: undefined,
     title: "",
@@ -25,20 +29,12 @@ export const AddLecture = () => {
     videoSrc: "",
   });
 
-  function handleInputChange(e) {
-    const { name, value } = e.target;
-    setUserInput({
-      ...userInput,
-      [name]: value,
-    });
-  }
-
   function handleVideo(e) {
     const video = e.target.files[0];
     const fileName = video.name;
     const fileExtension = fileName.split(".").pop().toLowerCase();
     if (!FileExtensions.Lecture.includes(fileExtension)) {
-      showToaster("error", "Invalid file format");
+      showToaster(ToasterType.Error, Messages.Error.File);
       return;
     }
     const source = window.URL.createObjectURL(video);
@@ -52,11 +48,11 @@ export const AddLecture = () => {
   async function onFormSubmit(e) {
     e.preventDefault();
     if (!lectureDetails && !userInput.lecture) {
-      showToaster("error", "Lecture video is mandatory");
+      showToaster(ToasterType.Error, Messages.Validation.Lecture.Video);
       return;
     }
     if (!userInput.title || !userInput.description) {
-      showToaster("error", "All fields are mandatory");
+      showToaster(ToasterType.Error, Messages.Validation.AllDetailsMandatory);
       return;
     }
     const response = lectureDetails?._id
@@ -85,6 +81,20 @@ export const AddLecture = () => {
     });
   }
 
+  function isSubmitButtonDisabled() {
+    const oldDetails = {
+      title: lectureDetails?.title,
+      description: lectureDetails?.description,
+      video: lectureDetails?.lecture?.secure_url,
+    };
+    const newDetails = {
+      title: userInput?.title,
+      description: userInput?.description,
+      video: userInput?.videoSrc,
+    };
+    return isEqual(oldDetails, newDetails);
+  }
+
   useEffect(() => {
     if (!courseDetails) navigate(AllRoutes.Courses);
     if (lectureDetails) setLectureDetails();
@@ -92,13 +102,10 @@ export const AddLecture = () => {
 
   return (
     <HomeLayout>
-      <div className="container-wrapper text-white flex flex-col items-center justify-center gap-10">
+      <div className="container-wrapper text-white">
         <div className="flex flex-col gap-5 p-2 shadow-[0_0_10px_black] w-96 rounded-lg">
           <header className="flex items-center justify-start gap-5">
-            <BackButton
-              route={AllRoutes.CourseLectures}
-              state={courseDetails}
-            />
+            <BackButton state={courseDetails} />
             <h1 className="text-xl text-yellow-500 font-semibold">
               Add new lecture
             </h1>
@@ -157,7 +164,8 @@ export const AddLecture = () => {
             />
             <button
               type="submit"
-              className="btn btn-primary py-1 font-semibold text-lg"
+              className="disabled:bg-gray-700 disabled:text-gray-500 disabled:border-none bg-yellow-600 enabled:hover:bg-transparent border enabled:hover:text-yellow-600 border-yellow-600 rounded-lg py-1 transition-all ease-in-out duration-300 font-semibold text-lg "
+              disabled={isSubmitButtonDisabled()}
             >
               Add new Lecture
             </button>

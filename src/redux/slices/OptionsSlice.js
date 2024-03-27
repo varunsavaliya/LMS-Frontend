@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import { EndPoints } from "../../constants/EndPoints";
+import { ToasterType } from "../../constants/ToasterType";
 import axiosInstance from "../../helpers/axiosInstance";
 import { showToaster } from "../../utils/ToasterService";
 
@@ -13,7 +14,10 @@ export const getAllUsers = createAsyncThunk("/user/all-users", async () => {
     const response = axiosInstance.get(EndPoints.Options.Users);
     return (await response).data;
   } catch (error) {
-    showToaster("error", error?.response?.data?.message ?? error.message);
+    showToaster(
+      ToasterType.Error,
+      error?.response?.data?.message ?? error.message
+    );
   }
 });
 

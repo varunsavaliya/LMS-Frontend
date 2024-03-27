@@ -1,15 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import { RiArrowLeftSLine } from "react-icons/ri";
 
-export const BackButton = ({ route, state }) => {
+export const BackButton = ({ state }) => {
   const navigate = useNavigate();
   return (
     <button
-      className="text-xl text-green-500"
-      onClick={() => navigate(route, { state: { ...state } })}
+      className="text-xl text-gray-300 me-2"
+      onClick={() => navigate(-1, { state: { ...state } })}
     >
-      <AiOutlineArrowLeft />
+      <RiArrowLeftSLine className="text-3xl" />
     </button>
   );
 };

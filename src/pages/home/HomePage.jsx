@@ -7,7 +7,7 @@ function HomePage() {
   return (
     <>
       <HomeLayout>
-        <div className="container-wrapper text-white flex items-center justify-center gap-10">
+        <div className="container-wrapper text-white gap-10">
           <div className="w-full md:w-1/2  space-y-6">
             <h1 className="sm:text-5xl text-3xl font-semibold text-center sm:text-left">
               Find out best

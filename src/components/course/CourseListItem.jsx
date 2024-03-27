@@ -1,9 +1,10 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
 import { AllRoutes } from "../../constants/Routes";
+import { IoInformationCircleSharp } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 import { UserRole } from "../../constants/UserRole";
-import { useSelectorUserState } from "../../redux/slices/AuthSlice";
 import { useSelectorOptionsState } from "../../redux/slices/OptionsSlice";
+import { useSelectorUserState } from "../../redux/slices/AuthSlice";
+import React from "react";
 
 export const CourseListItem = ({ details }) => {
   const navigate = useNavigate();
@@ -11,7 +12,18 @@ export const CourseListItem = ({ details }) => {
   const { users } = useSelectorOptionsState();
   return (
     <div className="text-white w-[17rem] sm:w-[22rem] min-h-[452px] shadow-lg rounded-lg group overflow-hidden bg-zinc-700">
-      <div className="overflow-hidden ">
+      <div className="overflow-hidden relative z-30">
+        {details?.createdBy === data?._id && (
+          <span className="absolute flex justify-center items-center gap-1 bg-yellow-600 right-2 top-2 px-2 rounded-lg">
+            Your Course
+            <div
+              className="tooltip tooltip-left"
+              data-tip="You can edit course or add lectures"
+            >
+              <IoInformationCircleSharp className="cursor-pointer" />
+            </div>
+          </span>
+        )}
         <img
           className="h-48 w-full rounded-tl-lg rounded-tr-lg object-cover group-hover:scale=[1,2] transition-all ease-in-out duration-200"
           src={details?.thumbnail?.secure_url}

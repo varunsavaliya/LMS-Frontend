@@ -1,47 +1,43 @@
-import React, { useState } from "react";
-import { toast } from "react-hot-toast";
-import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { AllRoutes } from "../../constants/Routes";
 import { CustomButton } from "../../components/shared/CustomButton";
 import { CustomInput } from "../../components/shared/CustomInput";
-import { AllRoutes } from "../../constants/Routes";
-import HomeLayout from "../../layouts/HomeLayout";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../redux/slices/AuthSlice";
+import { Messages } from "../../constants/Messages";
+import { showToaster } from "../../utils/ToasterService";
+import { ToasterType } from "../../constants/ToasterType";
+import { useDispatch } from "react-redux";
+import { useStateHandler } from "../../hooks/shared/useStateHandler";
+import HomeLayout from "../../layouts/HomeLayout";
 
 export const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const [loginData, setLoginData] = useState({
+  const initialLoginState = {
     email: "",
     password: "",
-  });
+  };
 
-  function handleUserInput(e) {
-    const { name, value } = e.target;
-    setLoginData({ ...loginData, [name]: value });
-  }
+  const [loginData, handleUserInput, setLoginData] =
+    useStateHandler(initialLoginState);
 
   async function onLogin(e) {
     e.preventDefault();
     if (!loginData.email || !loginData.password) {
-      toast.error("Please fill all the details");
+      showToaster(ToasterType.Error, Messages.Validation.AllDetailsMandatory);
       return;
     }
 
     const res = await dispatch(login(loginData));
-    if (res && res.payload?.success) {
-      setLoginData({
-        email: "",
-        password: "",
-      });
+    if (res?.payload?.success) {
+      setLoginData(initialLoginState);
       navigate(AllRoutes.Home);
     }
   }
 
   return (
     <HomeLayout>
-      <div className="container flex items-center justify-center h-[90vh] m-auto px-5 sm:px-0">
+      <div className="container-wrapper">
         <form
           onSubmit={onLogin}
           className="flex flex-col justify-center gap-3 rounded-lg p-4 text-white w-96 shadow-[0_0_10px_black] mt-9 sm:mt-0"

@@ -13,12 +13,12 @@ export const NavItems = [
     allowedRoles: [UserRole.Admin],
   },
   {
-    title: "Create new course",
+    title: "Create New Course",
     route: AllRoutes.CreateCourse,
     allowedRoles: [UserRole.Admin, UserRole.Tutor],
   },
   {
-    title: "Your courses",
+    title: "Your Courses",
     route: AllRoutes.TutorCourses,
     allowedRoles: [UserRole.Tutor],
   },

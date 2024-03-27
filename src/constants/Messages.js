@@ -1,4 +1,9 @@
 export const Messages = {
+  Confirm: {
+    Course: {
+      Delete: "Are you sure you want to delete this course ?",
+    },
+  },
   Loading: {
     Auth: {
       CreateAccount: "Wait! while creating your account",
@@ -19,5 +24,36 @@ export const Messages = {
       Verify: "Wait, while verifying your payment",
       Unsubscribe: "Unsubscribing the bundle",
     },
+    User: {
+      Contact: "Submitting your message",
+    },
+    Lecture: {
+      Lectures: "Fetching course lecture",
+      Create: "Adding course lecture",
+      Update: "Updating course lecture",
+      Delete: "Deleting course lecture",
+    },
+  },
+  Validation: {
+    AllDetailsMandatory: "Fill all the details",
+    User: {
+      Password: "Password should be at least 8 characters",
+      Name: "Name should be at least 5 characters",
+      Email: "Enter a valid email",
+    },
+    Lecture: {
+      Video: "Lecture video is mandatory",
+    },
+    Course: {
+      Thumbnail: "Course thumbnail is mandatory",
+      Description: "Description must be at least 8 characters",
+    },
+  },
+  Error: {
+    File: "Invalid file format",
+    SomethingWrong: "Something went wrong",
+  },
+  Success: {
+    Payment: "Payment successful",
   },
 };

@@ -21,7 +21,7 @@ export const CourseList = () => {
 
   return (
     <HomeLayout>
-      <div className="container-wrapper pt-12 flex justify-center items-center flex-col gap-10 text-white">
+      <div className="container-wrapper flex-col gap-10 text-white">
         <h1 className="text-center text-3xl font-semibold mb-5">
           Explore the courses made by
           <span className="font-bold text-yellow-500"> Industry Experts</span>

@@ -1,48 +1,50 @@
-import React, { useState } from "react";
-import { toast } from "react-hot-toast";
+import { AllRoutes } from "../../constants/Routes";
 import { BsPersonCircle } from "react-icons/bs";
-import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { createAccount } from "../../redux/slices/AuthSlice";
 import { CustomButton } from "../../components/shared/CustomButton";
 import { CustomInput } from "../../components/shared/CustomInput";
-import { AllRoutes } from "../../constants/Routes";
-import { UserRole } from "../../constants/UserRole";
 import { isEmailValid } from "../../helpers/regexMatcher";
+import { Link, useNavigate } from "react-router-dom";
+import { Messages } from "../../constants/Messages";
+import { showToaster } from "../../utils/ToasterService";
+import { ToasterType } from "../../constants/ToasterType";
+import { useDispatch } from "react-redux";
+import { UserRole } from "../../constants/UserRole";
+import { useStateHandler } from "../../hooks/shared/useStateHandler";
 import HomeLayout from "../../layouts/HomeLayout";
-import { createAccount } from "../../redux/slices/AuthSlice";
 
 export const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [previewImage, setPreviewImage] = useState("");
-
-  const [signUpData, setSignUpData] = useState({
+  const initialSignUpState = {
     fullName: "",
     email: "",
     password: "",
     avatar: "",
     role: UserRole.User,
-  });
+    previewImage: "",
+  };
 
-  function handleUserInput(e) {
-    const { name, value } = e.target;
-    setSignUpData({ ...signUpData, [name]: value });
-  }
+  const [signUpData, handleUserInput, setSignUpData] =
+    useStateHandler(initialSignUpState);
 
   function getImage(e) {
     e.preventDefault();
     const uploadedImage = e.target.files[0];
     if (uploadedImage) {
-      setSignUpData({
-        ...signUpData,
+      setSignUpData((prevSignUpData) => ({
+        ...prevSignUpData,
         avatar: uploadedImage,
-      });
+      }));
 
       const fileReader = new FileReader();
       fileReader.readAsDataURL(uploadedImage);
       fileReader.addEventListener("load", function () {
-        setPreviewImage(this.result);
+        setSignUpData((prevSignUpData) => ({
+          ...prevSignUpData,
+          previewImage: fileReader.result,
+        }));
       });
     }
   }
@@ -55,22 +57,22 @@ export const SignUp = () => {
       !signUpData.password ||
       !signUpData.role
     ) {
-      toast.error("Please fill all the details");
+      showToaster(ToasterType.Error, Messages.Validation.AllDetailsMandatory);
       return;
     }
 
     if (signUpData.fullName.length < 5) {
-      toast.error("Name should be at least 5 characters");
+      showToaster(ToasterType.Error, Messages.Validation.User.Name);
       return;
     }
 
     if (!isEmailValid(signUpData.email)) {
-      toast.error("Enter a valid email");
+      showToaster(ToasterType.Error, Messages.Validation.User.Email);
       return;
     }
 
     if (signUpData.password.length < 8) {
-      toast.error("Password should be at least 8 characters");
+      showToaster(ToasterType.Error, Messages.Validation.User.Password);
       return;
     }
 
@@ -80,23 +82,16 @@ export const SignUp = () => {
     formData.append("password", signUpData.password);
     formData.append("avatar", signUpData.avatar);
     formData.append("role", signUpData.role);
-
     const res = await dispatch(createAccount(formData));
-    if (res && res.payload?.success) {
-      setSignUpData({
-        fullName: "",
-        email: "",
-        password: "",
-        avatar: "",
-      });
-      setPreviewImage("");
+    if (res?.payload?.success) {
+      setSignUpData(initialSignUpState);
       navigate(AllRoutes.Home);
     }
   }
 
   return (
     <HomeLayout>
-      <div className="container flex items-center justify-center h-[90vh] m-auto px-5 sm:px-0">
+      <div className="container-wrapper flex justify-center items-center">
         <form
           onSubmit={createNewAccount}
           className="flex flex-col justify-center gap-3 rounded-lg p-4 text-white w-96 shadow-[0_0_10px_black] mt-9 sm:mt-0"
@@ -107,10 +102,10 @@ export const SignUp = () => {
             htmlFor="image_uploads"
             className="cursor-pointer w-max m-auto"
           >
-            {previewImage ? (
+            {signUpData.previewImage ? (
               <img
                 className="w-24 h-24 rounded-full m-auto"
-                src={previewImage}
+                src={signUpData.previewImage}
                 alt=""
               />
             ) : (
@@ -162,7 +157,11 @@ export const SignUp = () => {
               className="bg-transparent px-2 py-1 border rounded-lg w-full"
             >
               {Object.values(UserRole).map((role) => (
-                <option key={role} className="bg-gray-700 text-white" value={role}>
+                <option
+                  key={role}
+                  className="bg-gray-700 text-white"
+                  value={role}
+                >
                   {role}
                 </option>
               ))}

@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import HomeLayout from "../../layouts/HomeLayout";
+import { AllRoutes } from "../../constants/Routes";
+import { BiRupee } from "react-icons/bi";
+import { CustomButton } from "../../components/shared/CustomButton";
 import {
   getLoggedInUser,
   useSelectorUserState,
@@ -12,16 +11,21 @@ import {
   useSelectorRazorpayState,
   verifyUserPayment,
 } from "../../redux/slices/RazorpaySlice";
+import { Messages } from "../../constants/Messages";
 import { showToaster } from "../../utils/ToasterService";
-import { BiRupee } from "react-icons/bi";
-import { CustomButton } from "../../components/shared/CustomButton";
-import { AllRoutes } from "../../constants/Routes";
+import { ToasterType } from "../../constants/ToasterType";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { UserRole } from "../../constants/UserRole";
+import HomeLayout from "../../layouts/HomeLayout";
+import React, { useEffect } from "react";
 
 export const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { key, subscription_id } = useSelectorRazorpayState();
   const user = useSelectorUserState()?.data;
+  const role = useSelectorUserState()?.role;
 
   const paymentDetails = {
     razorpay_payment_id: "",
@@ -38,7 +42,7 @@ export const Checkout = () => {
     e.preventDefault();
 
     if (!key || !subscription_id) {
-      showToaster("error", "Something went wrong");
+      showToaster(ToasterType.Error, Messages.Error.SomethingWrong);
       return;
     }
 
@@ -60,14 +64,14 @@ export const Checkout = () => {
         paymentDetails.razorpay_subscription_id =
           response.razorpay_subscription_id;
 
-        showToaster("success", "Payment successful");
+        showToaster(ToasterType.Success, Messages.Success.Payment);
 
         const res = await dispatch(verifyUserPayment(paymentDetails));
         if (res?.payload?.success) {
           await dispatch(getLoggedInUser());
-          navigate(AllRoutes.CheckoutSuccess);
+          navigate(AllRoutes.CheckoutSuccess, { state: { success: true } });
         } else {
-          navigate(AllRoutes.CheckoutFail);
+          navigate(AllRoutes.CheckoutSuccess, { state: { success: false } });
         }
       },
     };
@@ -77,14 +81,15 @@ export const Checkout = () => {
   }
 
   useEffect(() => {
-    load();
+    if (role === UserRole.Admin) navigate(AllRoutes.Courses);
+    else load();
   }, []);
 
   return (
     <HomeLayout>
       <form
         onSubmit={handleSubscription}
-        className="min-h-[90vh] flex items-center justify-center text-white"
+        className="container-wrapper text-white"
       >
         <div className="w-80 h-[26rem] flex flex-col justify-start shadow-[0_0_10px_black] rounded-lg ">
           <h1 className="bg-yellow-500  top-0 w-full text-center py-4 text-2xl font-bold rounded-tr-lg">

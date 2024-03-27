@@ -1,28 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
 import { EndPoints } from "../../constants/EndPoints";
+import { FinalMonths } from "../../constants/FinalMonths";
 import { Messages } from "../../constants/Messages";
-import axiosInstance from "../../helpers/axiosInstance";
 import { promiseToaster, showToaster } from "../../utils/ToasterService";
+import { useSelector } from "react-redux";
+import axiosInstance from "../../helpers/axiosInstance";
+import { ToasterType } from "../../constants/ToasterType";
 
 const initialState = {
   key: "",
   subscription_id: "",
   allPayments: [],
-  finalMonths: [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ],
+  finalMonths: FinalMonths,
   monthlySalesRecord: [],
 };
 
@@ -31,7 +20,10 @@ export const getRazorpayId = createAsyncThunk("/razorpay/getId", async () => {
     const response = axiosInstance.get(EndPoints.Payment.RazorpayId);
     return (await response).data;
   } catch (error) {
-    showToaster("error", error?.response?.data?.message ?? error.message);
+    showToaster(
+      ToasterType.Error,
+      error?.response?.data?.message ?? error.message
+    );
   }
 });
 
@@ -44,7 +36,10 @@ export const purchaseCourseBundle = createAsyncThunk(
       );
       return (await response).data;
     } catch (error) {
-      showToaster("error", error?.response?.data?.message ?? error.message);
+      showToaster(
+        ToasterType.Error,
+        error?.response?.data?.message ?? error.message
+      );
     }
   }
 );
@@ -73,7 +68,10 @@ export const getPaymentRecord = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      showToaster("error", error?.response?.data?.message ?? error.message);
+      showToaster(
+        ToasterType.Error,
+        error?.response?.data?.message ?? error.message
+      );
     }
   }
 );
@@ -96,17 +94,14 @@ const razorpaySlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getRazorpayId.fulfilled, (state, action) => {
-        if (action.payload) state.key = action.payload.key;
+        state.key = action?.payload?.key;
       })
       .addCase(purchaseCourseBundle.fulfilled, (state, action) => {
-        if (action.payload)
-          state.subscription_id = action.payload.subscription_id;
+        state.subscription_id = action?.payload?.subscription_id;
       })
       .addCase(getPaymentRecord.fulfilled, (state, action) => {
-        if (action.payload) {
-          state.allPayments = action.payload?.data?.allPayments;
-          state.monthlySalesRecord = action.payload?.data?.paymentsByMonth;
-        }
+        state.allPayments = action?.payload?.data?.allPayments;
+        state.monthlySalesRecord = action?.payload?.data?.paymentsByMonth;
       });
   },
 });

@@ -3,6 +3,7 @@ import { promiseToaster } from "../../utils/ToasterService";
 import axiosInstance from "../../helpers/axiosInstance";
 import { EndPoints } from "../../constants/EndPoints";
 import { useSelector } from "react-redux";
+import { Messages } from "../../constants/Messages";
 
 const initialState = {
   lectures: [],
@@ -15,7 +16,7 @@ export const getCourseLectures = createAsyncThunk(
       axiosInstance.get(
         `${EndPoints.Lecture.Path}/${EndPoints.Lecture.Get.AllLectures}/${cid}`
       ),
-      "Fetching course lectures"
+      Messages.Loading.Lecture.Lectures
     );
     return (await res).data;
   }
@@ -34,7 +35,7 @@ export const addCourseLectures = createAsyncThunk(
         `${EndPoints.Lecture.Path}/${EndPoints.Lecture.Get.AllLectures}/${data.id}`,
         formData
       ),
-      "Adding course lecture"
+      Messages.Loading.Lecture.Create
     );
     return (await res).data;
   }
@@ -53,7 +54,7 @@ export const updateCourseLectures = createAsyncThunk(
         `${EndPoints.Lecture.Path}/${EndPoints.Lecture.Get.AllLectures}/${data.id}/${data.lectureId}`,
         formData
       ),
-      "Adding course lecture"
+      Messages.Loading.Lecture.Update
     );
     return (await res).data;
   }
@@ -66,7 +67,7 @@ export const deleteCourseLectures = createAsyncThunk(
       axiosInstance.delete(
         `${EndPoints.Lecture.Path}/${EndPoints.Lecture.Get.AllLectures}/${data.courseId}/${data.lectureId}`
       ),
-      "Deleting course lecture"
+      Messages.Loading.Lecture.Delete
     );
     return (await res).data;
   }

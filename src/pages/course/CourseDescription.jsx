@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { BackButton } from "../../components/shared/BackButton";
 import { AllRoutes } from "../../constants/Routes";
+import { BackButton } from "../../components/shared/BackButton";
+import { SubscriptionStatus } from "../../constants/SubscriptionStatus";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { UserRole } from "../../constants/UserRole";
-import HomeLayout from "../../layouts/HomeLayout";
-import { useSelectorUserState } from "../../redux/slices/AuthSlice";
 import { useSelectorOptionsState } from "../../redux/slices/OptionsSlice";
+import { useSelectorUserState } from "../../redux/slices/AuthSlice";
+import HomeLayout from "../../layouts/HomeLayout";
 
 export const CourseDescription = () => {
   const { state } = useLocation();
@@ -19,9 +20,9 @@ export const CourseDescription = () => {
 
   return (
     <HomeLayout>
-      <div className="container-wrapper flex flex-col justify-center items-center text-white">
+      <div className="container-wrapper flex-col text-white">
         <div className="flex justify-center items-center gap-5">
-          <BackButton route={AllRoutes.Courses} />
+          <BackButton />
           <h1 className="text-3xl font-bold text-yellow-500">{state?.title}</h1>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-10 relative">
@@ -47,7 +48,7 @@ export const CourseDescription = () => {
                   {users.find((u) => u._id === state?.createdBy)?.fullName}
                 </p>
                 {role === UserRole.Admin ||
-                data?.subscription?.status === "active" ||
+                data?.subscription?.status === SubscriptionStatus.Active ||
                 data?._id === state?.createdBy ? (
                   <button
                     onClick={() =>

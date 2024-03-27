@@ -1,62 +1,54 @@
-import React, { useState } from "react";
-import { toast } from "react-hot-toast";
-import axiosInstance from "../../helpers/axiosInstance";
 import { isEmailValid } from "../../helpers/regexMatcher";
+import { useStateHandler } from "../../hooks/shared/useStateHandler";
+import axiosInstance from "../../helpers/axiosInstance";
 import HomeLayout from "../../layouts/HomeLayout";
+import { Messages } from "../../constants/Messages";
+import { ToasterType } from "../../constants/ToasterType";
+import { promiseToaster, showToaster } from "../../utils/ToasterService";
 
 export const ContactUs = () => {
-  const [contactData, setContactData] = useState({
+  const initialContactState = {
     name: "",
     email: "",
     message: "",
-  });
-
-  function handleUserInput(e) {
-    const { name, value } = e.target;
-    setContactData({ ...contactData, [name]: value });
-  }
+  };
+  const [contactData, handleUserInput, setContactData] =
+    useStateHandler(initialContactState);
 
   async function handleContact(e) {
     e.preventDefault();
     if (!contactData.name || !contactData.email || !contactData.message) {
-      toast.error("Please fill all the details");
+      showToaster(
+        ToasterType.Error,
+        Messages.Validation.AllDetailsMandatory
+      );
       return;
     }
 
     if (contactData.name.length < 5) {
-      toast.error("Name should be at least 5 characters");
+      showToaster(ToasterType.Error, Messages.Validation.User.Name);
       return;
     }
 
     if (!isEmailValid(contactData.email)) {
-      toast.error("Enter a valid email");
+      showToaster(ToasterType.Error, Messages.Validation.User.Email);
       return;
     }
 
-    try {
-      const res = axiosInstance.post("/contact", contactData);
-      toast.promise(res, {
-        loading: "Submitting your message",
-        success: "Message submitted successfully",
-        error: "Failed to submit the message",
-      });
+    const res = promiseToaster(
+      axiosInstance.post("/contact", contactData),
+      Messages.Loading.User.Contact
+    );
 
-      const data = (await res).data;
-      if (data.success) {
-        setContactData({
-          name: "",
-          email: "",
-          message: "",
-        });
-      }
-    } catch (error) {
-      toast.error(error?.response?.data?.message ?? error?.message);
+    const data = (await res).data;
+    if (data?.success) {
+      setContactData(initialContactState);
     }
   }
 
   return (
     <HomeLayout>
-      <div className="container-wrapper flex items-center justify-center">
+      <div className="container-wrapper">
         <form
           onSubmit={handleContact}
           className="flex flex-col justify-center items-center gap-3 rounded-lg p-4 text-white w-96 shadow-[0_0_10px_black] mt-9 sm:mt-0"

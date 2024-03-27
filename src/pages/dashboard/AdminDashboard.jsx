@@ -10,9 +10,9 @@ import {
 } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
 import {
-  getPaymentRecord,
   useSelectorRazorpayState,
-} from "../../Redux/Slices/RazorpaySlice";
+  getPaymentRecord,
+} from "../../redux/slices/RazorpaySlice";
 import {
   getCourses,
   useSelectorCourseState,
@@ -86,7 +86,7 @@ export const AdminDashboard = () => {
   }, []);
   return (
     <HomeLayout>
-      <div className="container-wrapper flex flex-col flex-wrap gap-10 pt-5 text-white">
+      <div className="container-wrapper flex-col flex-wrap gap-10 text-white">
         <h1 className="text-center text-5xl font-semibold text-yellow-500">
           Admin Dashboard
         </h1>
@@ -140,21 +140,7 @@ export const AdminDashboard = () => {
             </div>
           </div>
         </div>
-
-        <div className="w-full self-center flex flex-col items-center justify-center gap-10 mb-10">
-          <div className="flex w-full items-center justify-between">
-            <h1 className="text-center text-3xl font-semibold">
-              Courses overview
-            </h1>
-            <CustomButton
-              title="Create new course"
-              clickHandler={() => navigate(AllRoutes.CreateCourse)}
-              width="fit"
-            />
-          </div>
-
-          <CourseTable courses={allCourses} />
-        </div>
+        <CourseTable courses={allCourses} />
       </div>
     </HomeLayout>
   );

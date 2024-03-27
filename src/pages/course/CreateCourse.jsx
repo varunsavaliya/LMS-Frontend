@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
-import { useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import { BackButton } from "../../components/shared/BackButton";
-import { CustomInput } from "../../components/shared/CustomInput";
 import { AllRoutes } from "../../constants/Routes";
-import { UserRole } from "../../constants/UserRole";
-import HomeLayout from "../../layouts/HomeLayout";
-import { useSelectorUserState } from "../../redux/slices/AuthSlice";
+import { BackButton } from "../../components/shared/BackButton";
 import { createCourse, updateCourse } from "../../redux/slices/CourseSlice";
+import { CustomInput } from "../../components/shared/CustomInput";
+import { isEqual } from "lodash";
+import { Messages } from "../../constants/Messages";
+import { showToaster } from "../../utils/ToasterService";
+import { ToasterType } from "../../constants/ToasterType";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { UserRole } from "../../constants/UserRole";
 import { useSelectorOptionsState } from "../../redux/slices/OptionsSlice";
+import { useSelectorUserState } from "../../redux/slices/AuthSlice";
+import { useStateHandler } from "../../hooks/shared/useStateHandler";
+import HomeLayout from "../../layouts/HomeLayout";
 
 export const CreateCourse = () => {
   const dispatch = useDispatch();
@@ -27,11 +31,25 @@ export const CreateCourse = () => {
     previewImage: "",
   };
 
-  const [courseDetails, setCourseDetails] = useState(initialCourseState);
+  const [courseDetails, handleUserInput, setCourseDetails] =
+    useStateHandler(initialCourseState);
 
-  function handleUserInput(e) {
-    const { name, value } = e.target;
-    setCourseDetails({ ...courseDetails, [name]: value });
+  function isSubmitButtonDisabled() {
+    const oldDetails = {
+      title: state?.title,
+      createdBy: state?.createdBy,
+      category: state?.category,
+      description: state?.description,
+      previewImage: state?.thumbnail?.secure_url,
+    };
+    const newDetails = {
+      title: courseDetails?.title,
+      createdBy: courseDetails?.createdBy,
+      category: courseDetails?.category,
+      description: courseDetails?.description,
+      previewImage: courseDetails?.previewImage,
+    };
+    return isEqual(oldDetails, newDetails);
   }
 
   function handleImageUpload(e) {
@@ -58,17 +76,17 @@ export const CreateCourse = () => {
       !courseDetails.category ||
       !courseDetails.createdBy
     ) {
-      toast.error("Please fill all the details");
+      showToaster(ToasterType.Error, Messages.Validation.AllDetailsMandatory);
       return;
     }
 
     if (!courseDetails.id && !courseDetails.thumbnail) {
-      toast.error("Course thumbnail is mandatory");
+      showToaster(ToasterType.Error, Messages.Validation.Course.Thumbnail);
       return;
     }
 
     if (courseDetails.description.length < 8) {
-      toast.error("Description must be at least 8 characters");
+      showToaster(ToasterType.Error, Messages.Validation.Course.Description);
       return;
     }
 
@@ -88,7 +106,7 @@ export const CreateCourse = () => {
       : await dispatch(createCourse(formData));
     if (response?.payload?.success) {
       setCourseDetails(initialCourseState);
-      navigate(AllRoutes.Courses);
+      navigate(AllRoutes.CourseDescription, {state: {...response?.payload?.data}});
     }
   }
 
@@ -109,18 +127,17 @@ export const CreateCourse = () => {
     if (state?._id) {
       setStateInCourseDetails();
     }
-    console.log(courseDetails);
   }, []);
 
   return (
     <HomeLayout>
-      <div className="container-wrapper flex items-center justify-center px-5 sm:px-0">
+      <div className="container-wrapper">
         <form
           onSubmit={onFormSubmit}
           className="flex flex-col justify-center gap-5 rounded-lg p-4 text-white w-[700px] my-10 shadow-[0_0_10px_black] relative"
         >
           <div className="flex justify-start items-center gap-5">
-            <BackButton route={AllRoutes.Courses} />
+            <BackButton />
             <h1 className="text-center text-2xl font-bold">
               Create New Course
             </h1>
@@ -212,8 +229,9 @@ export const CreateCourse = () => {
             </div>
           </main>
           <button
-            className="bg-yellow-600 hover:bg-transparent border hover:text-yellow-600 border-yellow-600 rounded-lg py-1 mt-6 transition-all ease-in-out duration-300 font-semibold text-lg"
+            className="disabled:bg-gray-700 disabled:text-gray-500 disabled:border-none bg-yellow-600 enabled:hover:bg-transparent border enabled:hover:text-yellow-600 border-yellow-600 rounded-lg py-1 mt-6 transition-all ease-in-out duration-300 font-semibold text-lg "
             type="submit"
+            disabled={isSubmitButtonDisabled()}
           >
             {courseDetails.id ? "Update Course" : "Create Course"}
           </button>

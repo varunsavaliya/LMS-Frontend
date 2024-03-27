@@ -1,11 +1,11 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { NavItems } from "../../constants/NavItems";
 import { AllRoutes } from "../../constants/Routes";
-import { logout, useSelectorUserState } from "../../redux/slices/AuthSlice";
-import { NavListItem } from "./NavListItem";
 import { BsPersonCircle } from "react-icons/bs";
+import { Link, useNavigate } from "react-router-dom";
+import { logout, useSelectorUserState } from "../../redux/slices/AuthSlice";
+import { NavItems } from "../../constants/NavItems";
+import { NavListItem } from "./NavListItem";
+import { ProfileListItem } from "./ProfileListItem";
+import { useDispatch } from "react-redux";
 import { UserRole } from "../../constants/UserRole";
 
 export const NavBar = () => {
@@ -19,41 +19,26 @@ export const NavBar = () => {
     if (isLoggedIn) {
       return (
         <>
-          <li>
-            <Link
-              to={AllRoutes.UserProfile}
-              className="justify-between text-base"
-            >
-              Profile
-              <span className="badge-primary px-2 rounded-full text-sm">
-                New
-              </span>
-            </Link>
-          </li>
-          <li>
-            <span
-              onClick={handleLogout}
-              to={AllRoutes.UserProfile}
-              className="justify-between"
-            >
-              Logout
+          <li className="text-gray-400 text-sm">
+            <span className="flex flex-col justify-center items-start">
+              <span> Logged in as</span>
+              <div> {data?.email}</div>
             </span>
           </li>
+          <div className="divider my-0"></div>
+          <ProfileListItem
+            badgeTitle="New"
+            route={AllRoutes.UserProfile}
+            title="Profile"
+          />
+          <ProfileListItem handler={handleLogout} title="Logout" />
         </>
       );
     } else {
       return (
         <>
-          <li>
-            <Link to={AllRoutes.Login} className="justify-between">
-              Login
-            </Link>
-          </li>
-          <li>
-            <Link to={AllRoutes.SignUp} className="justify-between">
-              Sign Up
-            </Link>
-          </li>
+          <ProfileListItem route={AllRoutes.Login} title="Login" />
+          <ProfileListItem route={AllRoutes.SignUp} title="Sign Up" />
         </>
       );
     }
@@ -68,10 +53,11 @@ export const NavBar = () => {
 
   return (
     <div className="navbar text-white flex justify-between items-center h-[7vh] px-5 bg-gray-800">
-      <div className="">
-        <Link to={AllRoutes.Home} className="btn btn-ghost text-xl">
+      <div className="flex flex-col gap-0 justify-center items-start">
+        <Link to={AllRoutes.Home} className="p-0 m-0 font-semibold text-lg">
           LMS
         </Link>
+        <span className="text-xs">Learning Management System</span>
       </div>
       <ul className="z-[1] p-2">
         {navItems.map((item) => (
@@ -83,14 +69,18 @@ export const NavBar = () => {
           <div
             tabIndex={0}
             role="button"
-            className="hover:bg-gray-700 p-1 rounded"
+            className="hover:bg-base-200 px-2 py-1 rounded"
           >
             <div className="flex justify-center items-center gap-2">
-              {data?.avatar?.secure_url ? (
-                <img alt="profile image" className="w-10 rounded-full border" src={data?.avatar?.secure_url} />
-              ) : (
-                <BsPersonCircle className="w-10 h-full m-auto rounded-full border border-black" />
-              )}
+              <div className="avatar">
+                <div className="w-10 mask mask-squircle">
+                  {data?.avatar?.secure_url ? (
+                    <img alt="profile image" src={data?.avatar?.secure_url} />
+                  ) : (
+                    <BsPersonCircle className="w-10 h-full" />
+                  )}
+                </div>
+              </div>
               <div className="whitespace-nowrap">{data?.fullName}</div>
             </div>
           </div>
