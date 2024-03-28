@@ -16,12 +16,12 @@ import {
 import {
   getCourses,
   useSelectorCourseState,
-} from "../../Redux/Slices/CourseSlice";
+} from "../../redux/slices/CourseSlice";
 import { FcSalesPerformance } from "react-icons/fc";
 import {
   getStatsData,
   useSelectorStatsState,
-} from "../../Redux/Slices/StatsSlice";
+} from "../../redux/slices/StatsSlice";
 import { GiMoneyStack } from "react-icons/gi";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
