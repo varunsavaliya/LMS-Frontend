@@ -27,7 +27,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUsers } from "react-icons/fa";
-import HomeLayout from "../../Layouts/HomeLayout";
+import HomeLayout from "../../layouts/HomeLayout";
 import { AllRoutes } from "../../constants/Routes";
 import { CustomButton } from "../../components/shared/CustomButton";
 import { CourseTable } from "../../components/course/CourseTable";
