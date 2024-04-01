@@ -35,6 +35,7 @@ function App() {
       isLoggedIn: isTokenValid(),
       role: getRole(),
     };
+    if (!userState.isLoggedIn) userState.role = "";
     dispatch(updateUserState(userState));
     userState.isLoggedIn && (await dispatch(getLoggedInUser()));
     await dispatch(getAllUsers());
