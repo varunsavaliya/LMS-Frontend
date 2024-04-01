@@ -1,14 +1,11 @@
-import { AllRoutes } from "../../constants/Routes";
 import { BackButton } from "../../components/shared/BackButton";
-import { createCourse, updateCourse } from "../../redux/slices/CourseSlice";
 import { CustomInput } from "../../components/shared/CustomInput";
 import { isEqual } from "lodash";
 import { Messages } from "../../constants/Messages";
 import { showToaster } from "../../utils/ToasterService";
 import { ToasterType } from "../../constants/ToasterType";
-import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { UserRole } from "../../constants/UserRole";
 import { useSelectorOptionsState } from "../../redux/slices/OptionsSlice";
 import { useSelectorUserState } from "../../redux/slices/AuthSlice";
@@ -16,8 +13,6 @@ import { useStateHandler } from "../../hooks/shared/useStateHandler";
 import HomeLayout from "../../layouts/HomeLayout";
 
 export const CreateCourse = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { state } = useLocation();
   const { role, data } = useSelectorUserState();
   const { users } = useSelectorOptionsState();
@@ -100,13 +95,14 @@ export const CreateCourse = () => {
       formData.append("thumbnail", courseDetails.thumbnail);
 
     if (courseDetails.id) formData.append("id", courseDetails.id);
-
     const response = courseDetails.id
       ? await dispatch(updateCourse(formData))
       : await dispatch(createCourse(formData));
     if (response?.payload?.success) {
       setCourseDetails(initialCourseState);
-      navigate(AllRoutes.CourseDescription, {state: {...response?.payload?.data}});
+      navigate(AllRoutes.CourseDescription, {
+        state: { ...response?.payload?.data },
+      });
     }
   }
 
