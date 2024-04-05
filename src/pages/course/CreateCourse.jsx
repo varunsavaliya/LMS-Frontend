@@ -5,17 +5,22 @@ import { Messages } from "../../constants/Messages";
 import { showToaster } from "../../utils/ToasterService";
 import { ToasterType } from "../../constants/ToasterType";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { UserRole } from "../../constants/UserRole";
 import { useSelectorOptionsState } from "../../redux/slices/OptionsSlice";
 import { useSelectorUserState } from "../../redux/slices/AuthSlice";
 import { useStateHandler } from "../../hooks/shared/useStateHandler";
 import HomeLayout from "../../layouts/HomeLayout";
+import { createCourse, updateCourse } from "../../redux/slices/CourseSlice";
+import { useDispatch } from "react-redux";
+import { AllRoutes } from "../../constants/Routes";
 
 export const CreateCourse = () => {
   const { state } = useLocation();
   const { role, data } = useSelectorUserState();
   const { users } = useSelectorOptionsState();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const initialCourseState = {
     id: "",
     title: "",
