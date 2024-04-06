@@ -60,15 +60,18 @@ export const CourseModificationOptions = ({ course }) => {
   }
 
   return (
-    <div id="menu-dropdown" className="dropdown dropdown-top dropdown-end">
+    <div
+      id="menu-dropdown"
+      className="dropdown dropdown-top dropdown-end dropdown-hover"
+    >
       <div
         tabIndex={0}
         role="button"
-        className="after:content-['\2807'] text-2xl"
+        className="after:content-['\2807'] text-2xl bottom-0"
       ></div>
       <ul
-        tabIndex={0}
-        className="dropdown-content z-[1] menu p-2 shadow rounded-box w-max bg-gray-700"
+        tabIndex="0"
+        className="dropdown-content z-[1000] menu p-2 shadow rounded-box w-max bg-gray-700"
       >
         {options.map((option) => (
           <li key={option.title}>

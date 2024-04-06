@@ -94,7 +94,7 @@ export const SignUp = () => {
       <div className="container-wrapper flex justify-center items-center">
         <form
           onSubmit={createNewAccount}
-          className="flex flex-col justify-center gap-3 rounded-lg p-4 text-white w-96 shadow-[0_0_10px_black] mt-9 sm:mt-0"
+          className="flex flex-col justify-center gap-3 rounded-lg p-4 text-white w-96 shadow-[0_0_10px_black] sm:mt-0"
         >
           <h1 className="text-center text-2xl font-bold">Registration Page</h1>
 
@@ -156,15 +156,17 @@ export const SignUp = () => {
               onChange={handleUserInput}
               className="bg-transparent px-2 py-1 border rounded-lg w-full"
             >
-              {Object.values(UserRole).map((role) => (
-                <option
-                  key={role}
-                  className="bg-gray-700 text-white"
-                  value={role}
-                >
-                  {role}
-                </option>
-              ))}
+              {Object.values(UserRole)
+                .filter((r) => r !== UserRole.Admin)
+                .map((role) => (
+                  <option
+                    key={role}
+                    className="bg-gray-700 text-white"
+                    value={role}
+                  >
+                    {role}
+                  </option>
+                ))}
             </select>
           </div>
 

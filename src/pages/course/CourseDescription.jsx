@@ -23,7 +23,9 @@ export const CourseDescription = () => {
       <div className="container-wrapper flex-col text-white">
         <div className="flex justify-center items-center gap-5">
           <BackButton />
-          <h1 className="text-3xl font-bold text-yellow-500">{state?.title}</h1>
+          <h1 className="text-xl md:text-3xl font-bold text-yellow-500">
+            {state?.title}
+          </h1>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-10 relative">
           <div className="space-y-5">

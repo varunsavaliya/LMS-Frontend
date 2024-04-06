@@ -5,6 +5,8 @@ import HomeLayout from "../../layouts/HomeLayout";
 import { Messages } from "../../constants/Messages";
 import { ToasterType } from "../../constants/ToasterType";
 import { promiseToaster, showToaster } from "../../utils/ToasterService";
+import { CustomInput } from "../../components/shared/CustomInput";
+import { SubmitButton } from "../../components/shared/SubmitButton";
 
 export const ContactUs = () => {
   const initialContactState = {
@@ -18,10 +20,7 @@ export const ContactUs = () => {
   async function handleContact(e) {
     e.preventDefault();
     if (!contactData.name || !contactData.email || !contactData.message) {
-      showToaster(
-        ToasterType.Error,
-        Messages.Validation.AllDetailsMandatory
-      );
+      showToaster(ToasterType.Error, Messages.Validation.AllDetailsMandatory);
       return;
     }
 
@@ -53,41 +52,29 @@ export const ContactUs = () => {
           onSubmit={handleContact}
           className="flex flex-col justify-center items-center gap-3 rounded-lg p-4 text-white w-96 shadow-[0_0_10px_black] mt-9 sm:mt-0"
         >
-          <h1 className="text-3xl font-semibold">Contact form</h1>
-          <div className="flex flex-col w-full gap-1">
-            <label htmlFor="name" className="text-xl font-semibold">
-              Name
-            </label>
-            <input
-              type="text"
-              className="bg-transparent border px-2 py-1 rounded-sm"
-              id="name"
-              name="name"
-              placeholder="Enter your name"
-              value={contactData.name}
-              onChange={handleUserInput}
-            />
-          </div>
-          <div className="flex flex-col w-full gap-1">
-            <label htmlFor="name" className="text-xl font-semibold">
-              Email
-            </label>
-            <input
-              type="text"
-              className="bg-transparent border px-2 py-1 rounded-sm"
-              id="email"
-              name="email"
-              placeholder="Enter your email"
-              value={contactData.email}
-              onChange={handleUserInput}
-            />
-          </div>
-          <div className="flex flex-col w-full gap-1">
-            <label htmlFor="name" className="text-xl font-semibold">
+          <h1 className="text-2xl md:text-3xl font-semibold">Contact form</h1>
+          <CustomInput
+            label="Name"
+            name="name"
+            onChange={handleUserInput}
+            value={contactData.name}
+            placeholder="Enter your name"
+          />
+          <CustomInput
+            label="Email"
+            type="email"
+            name="email"
+            onChange={handleUserInput}
+            value={contactData.email}
+            placeholder="Enter your email"
+          />
+
+          <div className="flex flex-col gap-1 w-full">
+            <label htmlFor="name" className="font-semibold">
               Message
             </label>
             <textarea
-              className="bg-transparent border px-2 py-1 rounded-sm resize-none h-40"
+              className="bg-transparent px-2 py-1 border rounded-lg disabled:bg-gray-800"
               id="message"
               name="message"
               placeholder="Enter your message"
@@ -95,13 +82,7 @@ export const ContactUs = () => {
               onChange={handleUserInput}
             />
           </div>
-
-          <button
-            className="w-full bg-yellow-600 hover:bg-transparent border hover:text-yellow-600 border-yellow-600 rounded-lg py-1 mt-6 transition-all ease-in-out duration-300 font-semibold text-lg"
-            type="submit"
-          >
-            Submit
-          </button>
+          <SubmitButton title="Submit" />
         </form>
       </div>
     </HomeLayout>

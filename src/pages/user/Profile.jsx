@@ -80,7 +80,7 @@ export const Profile = () => {
   return (
     <HomeLayout>
       <div className="container-wrapper text-white">
-        <div className="my-10 flex flex-col gap-4 rounded-lg p-4 text-white w-96 shadow-[0_0_10px_black]">
+        <div className="flex flex-col gap-4 rounded-lg p-4 text-white w-96 shadow-[0_0_10px_black]">
           <label
             htmlFor="image_uploads"
             className="cursor-pointer w-max m-auto"
@@ -105,22 +105,22 @@ export const Profile = () => {
           <h3 className="text-xl font-semibold text-center capitalize">
             {userData?.fullName}
           </h3>
-          <div className="grid grid-cols-2">
-            <p>Email: </p>
-            <p>{userData?.email}</p>
-            <p>Role: </p>
-            <p>{userData?.role}</p>
-            <p>Subscription: </p>
-            <p
-              className={
-                userData?.subscription?.status === SubscriptionStatus.Active
-                  ? "text-green-600"
-                  : "text-red-600"
-              }
-            >
-              {userData?.subscription?.status === SubscriptionStatus.Active
-                ? SubscriptionStatus.Active.toUpperCase()
-                : SubscriptionStatus.InActive.toUpperCase()}
+          <div className="grid grid-cols-1">
+            <p>Email: {userData?.email}</p>
+            <p>Role: {userData?.role}</p>
+            <p>
+              Subscription:{" "}
+              <span
+                className={
+                  userData?.subscription?.status === SubscriptionStatus.Active
+                    ? "text-green-600"
+                    : "text-red-600"
+                }
+              >
+                {userData?.subscription?.status === SubscriptionStatus.Active
+                  ? SubscriptionStatus.Active.toUpperCase()
+                  : SubscriptionStatus.InActive.toUpperCase()}
+              </span>
             </p>
           </div>
           <div className="flex items-center justify-between gap-2 overflow-hidden">

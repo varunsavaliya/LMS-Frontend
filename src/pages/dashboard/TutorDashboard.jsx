@@ -1,7 +1,5 @@
-import { AllRoutes } from "../../constants/Routes";
 import { CourseStatus } from "../../constants/CourseStatus";
 import { CourseTable } from "../../components/course/CourseTable";
-import { CustomButton } from "../../components/shared/CustomButton";
 import {
   getTutorCourses,
   useSelectorCourseState,
@@ -10,14 +8,12 @@ import { LuBookOpen } from "react-icons/lu";
 import { LuBookOpenCheck } from "react-icons/lu";
 import { TiVideo } from "react-icons/ti";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import HomeLayout from "../../layouts/HomeLayout";
 import React, { useEffect } from "react";
 
 export const TutorDashboard = () => {
   const { tutorCourses } = useSelectorCourseState();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   useEffect(() => {
     (async () => {
       await dispatch(getTutorCourses());

@@ -25,11 +25,8 @@ import {
 import { GiMoneyStack } from "react-icons/gi";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { FaUsers } from "react-icons/fa";
 import HomeLayout from "../../layouts/HomeLayout";
-import { AllRoutes } from "../../constants/Routes";
-import { CustomButton } from "../../components/shared/CustomButton";
 import { CourseTable } from "../../components/course/CourseTable";
 ChartJS.register(
   ArcElement,
@@ -42,7 +39,6 @@ ChartJS.register(
 );
 
 export const AdminDashboard = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { allUsersCount, subscribedCount } = useSelectorStatsState();
@@ -86,56 +82,78 @@ export const AdminDashboard = () => {
   }, []);
   return (
     <HomeLayout>
-      <div className="container-wrapper flex-col flex-wrap gap-10 text-white">
-        <h1 className="text-center text-5xl font-semibold text-yellow-500">
+      <div className="container-wrapper flex-col flex-wrap gap-3 md:gap-10 text-white">
+        <h1 className="text-center text-2xl md:text-5xl font-semibold text-yellow-500">
           Admin Dashboard
         </h1>
 
-        <div className="grid grid-cols-2 gap-5 m-auto mx-10">
-          <div className="flex flex-col items-center gap-10 p-5 shadow-lg rounded-md">
-            <div className="w-80 h-80">
+        <div className="grid grid-cols-2 gap-5 m-auto md:mx-10">
+          <div className="flex flex-col items-center gap-10 sm:p-5 p-2 shadow-lg rounded-md">
+            <div className="w-80 h-80 md:block hidden">
               <Pie data={usersData} />
             </div>
 
-            <div className="grid grid-cols-2 gap-5">
-              <div className="flex items-center justify-between p-5 gap-5 rounded-md shadow-md">
+            <div className="grid md:grid-cols-2 w-full gap-5">
+              <div className="flex items-center justify-center p-5 gap-5 rounded-md shadow-md">
                 <div className="flex flex-col items-center">
-                  <p className="font-semibold">Registered Users</p>
-                  <h3 className="text-4xl font-bold">{allUsersCount}</h3>
+                  <p className="font-semibold whitespace-nowrap text-sm sm:text-base">
+                    Total Users
+                  </p>
+                  <div className="flex gap-3 items-center justify-center">
+                    <h3 className="text-xl lg:text-4xl font-bold">
+                      {allUsersCount}
+                    </h3>
+                    <FaUsers className="text-yellow-500 text-3xl lg:text-5xl" />
+                  </div>
                 </div>
-                <FaUsers className="text-yellow-500 text-5xl" />
               </div>
-              <div className="flex items-center justify-between p-5 gap-5 rounded-md shadow-md">
+              <div className="flex items-center justify-center p-5 gap-5 rounded-md shadow-md">
                 <div className="flex flex-col items-center">
-                  <p className="font-semibold">Subscribed Users</p>
-                  <h3 className="text-4xl font-bold">{subscribedCount}</h3>
+                  <p className="font-semibold whitespace-nowrap text-sm sm:text-base">
+                    Subscribes
+                  </p>
+                  <div className="flex gap-3 items-center justify-center">
+                    <h3 className="text-xl lg:text-4xl font-bold">
+                      {subscribedCount}
+                    </h3>
+                    <FaUsers className="text-green-500 text-3xl lg:text-5xl" />
+                  </div>
                 </div>
-                <FaUsers className="text-green-500 text-5xl" />
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-10 p-5 shadow-lg rounded-md">
-            <div className="h-80 w-full">
+          <div className="flex flex-col items-center gap-10 sm:p-5 p-2 shadow-lg rounded-md">
+            <div className="h-80 w-full md:block hidden">
               <Bar className="h-80 w-full" data={salesData} />
             </div>
 
-            <div className="grid grid-cols-2 gap-5">
-              <div className="flex items-center justify-between p-5 gap-5 rounded-md shadow-md">
+            <div className="grid md:grid-cols-2 gap-5">
+              <div className="flex items-center justify-center p-5 gap-5 rounded-md shadow-md">
                 <div className="flex flex-col items-center">
-                  <p className="font-semibold">Subscription Count</p>
-                  <h3 className="text-4xl font-bold">{allPayments?.length}</h3>
+                  <p className="font-semibold whitespace-nowrap text-sm sm:text-base">
+                    Subscriptions
+                  </p>
+                  <div className="flex gap-3 items-center justify-center">
+                    <h3 className="text-xl lg:text-4xl font-bold">
+                      {allPayments?.length}
+                    </h3>
+                    <FcSalesPerformance className="text-yellow-500 text-3xl lg:text-5xl" />
+                  </div>
                 </div>
-                <FcSalesPerformance className="text-yellow-500 text-5xl" />
               </div>
-              <div className="flex items-center justify-between p-5 gap-5 rounded-md shadow-md">
-                <div className="flex flex-col items-center">
-                  <p className="font-semibold">Total Revenue</p>
-                  <h3 className="text-4xl font-bold">
-                    {allPayments?.length * 499}
-                  </h3>
+              <div className="flex items-center justify-center p-5 gap-5 rounded-md shadow-md">
+                <div className="flex flex-col items-center justify-center">
+                  <p className="font-semibold whitespace-nowrap text-sm sm:text-base">
+                    Revenue
+                  </p>
+                  <div className="flex gap-3 items-center justify-center">
+                    <h3 className="text-xl lg:text-4xl font-bold">
+                      {allPayments?.length * 499}
+                    </h3>
+                    <GiMoneyStack className="text-green-500 text-3xl lg:text-5xl" />
+                  </div>
                 </div>
-                <GiMoneyStack className="text-green-500 text-5xl" />
               </div>
             </div>
           </div>

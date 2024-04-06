@@ -14,6 +14,7 @@ import HomeLayout from "../../layouts/HomeLayout";
 import { createCourse, updateCourse } from "../../redux/slices/CourseSlice";
 import { useDispatch } from "react-redux";
 import { AllRoutes } from "../../constants/Routes";
+import { SubmitButton } from "../../components/shared/SubmitButton";
 
 export const CreateCourse = () => {
   const { state } = useLocation();
@@ -139,15 +140,18 @@ export const CreateCourse = () => {
         >
           <div className="flex justify-start items-center gap-5">
             <BackButton />
-            <h1 className="text-center text-2xl font-bold">
+            <h1 className="text-center text-base md:text-2xl font-bold">
               Create New Course
             </h1>
           </div>
 
-          <main className="grid grid-cols-2 gap-x-10">
-            <div className="gap-y-6">
+          <main className="flex flex-col md:flex-row justify-center items-center gap-6">
+            <div className="gap-y-6 w-full">
               <div>
-                <label htmlFor="image_uploads" className="cursor-pointer">
+                <label
+                  htmlFor="image_uploads"
+                  className="cursor-pointer text-base md:text-lg m-auto"
+                >
                   {courseDetails.previewImage ? (
                     <img
                       className="w-full h-44 m-auto border object-cover"
@@ -155,7 +159,7 @@ export const CreateCourse = () => {
                     />
                   ) : (
                     <div className="w-full h-44 m-auto flex justify-center items-center border rounded-lg">
-                      <h1 className="font-bold text-lg">
+                      <h1 className="font-bold text-center px-3">
                         Upload your course thumbnail
                       </h1>
                     </div>
@@ -180,7 +184,7 @@ export const CreateCourse = () => {
               />
             </div>
 
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 w-full">
               <div className="flex flex-col gap-1">
                 <label htmlFor="role" className="font-semibold">
                   Select Instructor
@@ -191,7 +195,7 @@ export const CreateCourse = () => {
                   onChange={handleUserInput}
                   disabled={role !== UserRole.Admin}
                   value={courseDetails.createdBy}
-                  className="bg-transparent px-2 py-1 border rounded-lg w-full"
+                  className="bg-transparent px-2 py-1 border rounded-lg"
                 >
                   {users.length &&
                     users.map((user) => (
@@ -213,7 +217,7 @@ export const CreateCourse = () => {
                 onChange={handleUserInput}
               />
               <div className="flex flex-col gap-1">
-                <label htmlFor="description" className="font-semibold text-lg">
+                <label htmlFor="description" className="font-semibold">
                   Course description
                 </label>
                 <textarea
@@ -229,13 +233,10 @@ export const CreateCourse = () => {
               </div>
             </div>
           </main>
-          <button
-            className="disabled:bg-gray-700 disabled:text-gray-500 disabled:border-none bg-yellow-600 enabled:hover:bg-transparent border enabled:hover:text-yellow-600 border-yellow-600 rounded-lg py-1 mt-6 transition-all ease-in-out duration-300 font-semibold text-lg "
-            type="submit"
+          <SubmitButton
             disabled={isSubmitButtonDisabled()}
-          >
-            {courseDetails.id ? "Update Course" : "Create Course"}
-          </button>
+            title={courseDetails.id ? "Update Course" : "Create Course"}
+          />
         </form>
       </div>
     </HomeLayout>

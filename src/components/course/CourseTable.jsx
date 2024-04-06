@@ -44,15 +44,17 @@ export const CourseTable = ({ courses }) => {
   return (
     <div className="w-full self-center flex flex-col items-center justify-center gap-10 mb-10">
       <div className="flex w-full items-center justify-between text-white">
-        <h1 className="text-center text-3xl font-semibold">Courses overview</h1>
+        <h1 className="text-center xs:text-lg  md:text-3xl font-semibold">
+          Courses overview
+        </h1>
         <CustomButton
           title="Create new course"
           clickHandler={() => navigate(AllRoutes.CreateCourse)}
           width="fit"
         />
       </div>
-      <div className="w-full">
-        <table className="table table-pin-rows text-white max-h-min">
+      <div className="w-full overflow-x-auto">
+        <table className="table md:table-auto table-xs table-pin-rows text-white max-h-min">
           <thead>
             <tr>
               <th>S No</th>

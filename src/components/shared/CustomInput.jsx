@@ -10,7 +10,7 @@ export const CustomInput = ({
   disabled = false,
 }) => {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 w-full">
       <label htmlFor={name} className="font-semibold">
         {label}
       </label>

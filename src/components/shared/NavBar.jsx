@@ -52,19 +52,54 @@ export const NavBar = () => {
   }
 
   return (
-    <div className="navbar text-white flex justify-between items-center h-[7vh] px-5 bg-gray-800">
-      <div className="flex flex-col gap-0 justify-center items-start">
+    <div className="navbar h-[7vh] text-white flex justify-between items-center px-5 bg-gray-800">
+      <div className="navbar-start">
+        <div className="dropdown">
+          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />
+            </svg>
+          </div>
+          <ul
+            tabIndex={0}
+            className="menu menu-sm dropdown-content mt-3 z-[1000] p-2 shadow bg-base-100 rounded-box w-52"
+          >
+            {navItems.map((item) => (
+              <NavListItem
+                key={item.title}
+                title={item.title}
+                route={item.route}
+              />
+            ))}
+          </ul>
+        </div>
         <Link to={AllRoutes.Home} className="p-0 m-0 font-semibold text-lg">
           LMS
         </Link>
-        <span className="text-xs">Learning Management System</span>
       </div>
-      <ul className="z-[1] p-2">
-        {navItems.map((item) => (
-          <NavListItem key={item.title} title={item.title} route={item.route} />
-        ))}
-      </ul>
-      <div className="flex-none">
+      <div className="navbar-center hidden lg:flex">
+        <ul className="menu menu-horizontal px-1">
+          {navItems.map((item) => (
+            <NavListItem
+              key={item.title}
+              title={item.title}
+              route={item.route}
+            />
+          ))}
+        </ul>
+      </div>
+      <div className="navbar-end">
         <div className="dropdown dropdown-end">
           <div
             tabIndex={0}
@@ -81,7 +116,9 @@ export const NavBar = () => {
                   )}
                 </div>
               </div>
-              <div className="whitespace-nowrap">{data?.fullName}</div>
+              {data.fullName && (
+                <div className="whitespace-nowrap">{data?.fullName}</div>
+              )}
             </div>
           </div>
           <ul

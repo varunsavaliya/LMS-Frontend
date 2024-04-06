@@ -4,8 +4,8 @@ function Footer() {
   const currentYear = new Date().getFullYear();
   return (
     <>
-      <footer className="footer relative left-0 bottom-0 h-[8vh] max-h-[15vh] gap-5 py-5 px-3 m-auto flex flex-col sm:flex-row items-center justify-between bg-gray-800">
-        <section className="flex text-red-50 text-lg">
+      <footer className="footer relative left-0 bottom-0 min-h-[8vh] max-h-[15vh] gap-2 md:gap-5 py-2 md:py-5 px-3 m-auto flex flex-col sm:flex-row items-center justify-between bg-gray-800">
+        <section className="flex text-red-50 text-sm md:text-lg">
           Copyright {currentYear} | All rights reserved
         </section>
         <div className="flex justify-between items-center gap-5">

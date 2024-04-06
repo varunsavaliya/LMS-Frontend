@@ -40,7 +40,7 @@ export const Login = () => {
       <div className="container-wrapper">
         <form
           onSubmit={onLogin}
-          className="flex flex-col justify-center gap-3 rounded-lg p-4 text-white w-96 shadow-[0_0_10px_black] mt-9 sm:mt-0"
+          className="flex flex-col justify-center gap-3 rounded-lg p-4 text-white w-96 shadow-[0_0_10px_black] sm:mt-0"
         >
           <h1 className="text-center text-2xl font-bold">Welcome back!!</h1>
           <CustomInput
@@ -64,7 +64,7 @@ export const Login = () => {
             Don't have an account ?{" "}
             <Link
               to={AllRoutes.SignUp}
-              className="link text-accent cursor-pointer"
+              className="link text-accent cursor-pointer whitespace-nowrap"
             >
               Sign Up
             </Link>

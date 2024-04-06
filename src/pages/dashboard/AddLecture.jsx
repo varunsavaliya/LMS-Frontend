@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useStateHandler } from "../../hooks/shared/useStateHandler";
 import HomeLayout from "../../layouts/HomeLayout";
+import { SubmitButton } from "../../components/shared/SubmitButton";
 
 export const AddLecture = () => {
   const { courseDetails, lectureDetails } = useLocation().state;
@@ -162,13 +163,10 @@ export const AddLecture = () => {
               onChange={handleVideo}
               accept=".mp4"
             />
-            <button
-              type="submit"
-              className="disabled:bg-gray-700 disabled:text-gray-500 disabled:border-none bg-yellow-600 enabled:hover:bg-transparent border enabled:hover:text-yellow-600 border-yellow-600 rounded-lg py-1 transition-all ease-in-out duration-300 font-semibold text-lg "
+            <SubmitButton
               disabled={isSubmitButtonDisabled()}
-            >
-              {lectureDetails ? "Update Lecture" : "Add new Lecture"}
-            </button>
+              title={lectureDetails ? "Update Lecture" : "Add new Lecture"}
+            />
           </form>
         </div>
       </div>
