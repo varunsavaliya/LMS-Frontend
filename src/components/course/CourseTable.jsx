@@ -42,9 +42,9 @@ export const CourseTable = ({ courses }) => {
   }
 
   return (
-    <div className="w-full self-center flex flex-col items-center justify-center gap-10 mb-10">
+    <div className="w-full self-center flex flex-col items-center justify-center gap-10 my-3">
       <div className="flex w-full items-center justify-between text-white">
-        <h1 className="text-center xs:text-lg  md:text-3xl font-semibold">
+        <h1 className="text-center xs:text-lg md:text-3xl font-semibold">
           Courses overview
         </h1>
         <CustomButton

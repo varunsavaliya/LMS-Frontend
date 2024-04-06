@@ -28,6 +28,7 @@ import { useEffect } from "react";
 import { FaUsers } from "react-icons/fa";
 import HomeLayout from "../../layouts/HomeLayout";
 import { CourseTable } from "../../components/course/CourseTable";
+import { StatsItem } from "../../components/dashboard/StatsItem";
 ChartJS.register(
   ArcElement,
   BarElement,
@@ -94,32 +95,12 @@ export const AdminDashboard = () => {
             </div>
 
             <div className="grid md:grid-cols-2 w-full gap-5">
-              <div className="flex items-center justify-center p-5 gap-5 rounded-md shadow-md">
-                <div className="flex flex-col items-center">
-                  <p className="font-semibold whitespace-nowrap text-sm sm:text-base">
-                    Total Users
-                  </p>
-                  <div className="flex gap-3 items-center justify-center">
-                    <h3 className="text-xl lg:text-4xl font-bold">
-                      {allUsersCount}
-                    </h3>
-                    <FaUsers className="text-yellow-500 text-3xl lg:text-5xl" />
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-center p-5 gap-5 rounded-md shadow-md">
-                <div className="flex flex-col items-center">
-                  <p className="font-semibold whitespace-nowrap text-sm sm:text-base">
-                    Subscribes
-                  </p>
-                  <div className="flex gap-3 items-center justify-center">
-                    <h3 className="text-xl lg:text-4xl font-bold">
-                      {subscribedCount}
-                    </h3>
-                    <FaUsers className="text-green-500 text-3xl lg:text-5xl" />
-                  </div>
-                </div>
-              </div>
+              <StatsItem number={allUsersCount} title="Users">
+                <FaUsers className="text-yellow-500 text-3xl lg:text-5xl" />
+              </StatsItem>
+              <StatsItem number={subscribedCount} title="Subscribes">
+                <FaUsers className="text-green-500 text-3xl lg:text-5xl" />
+              </StatsItem>
             </div>
           </div>
 
@@ -129,32 +110,12 @@ export const AdminDashboard = () => {
             </div>
 
             <div className="grid md:grid-cols-2 gap-5">
-              <div className="flex items-center justify-center p-5 gap-5 rounded-md shadow-md">
-                <div className="flex flex-col items-center">
-                  <p className="font-semibold whitespace-nowrap text-sm sm:text-base">
-                    Subscriptions
-                  </p>
-                  <div className="flex gap-3 items-center justify-center">
-                    <h3 className="text-xl lg:text-4xl font-bold">
-                      {allPayments?.length}
-                    </h3>
-                    <FcSalesPerformance className="text-yellow-500 text-3xl lg:text-5xl" />
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-center p-5 gap-5 rounded-md shadow-md">
-                <div className="flex flex-col items-center justify-center">
-                  <p className="font-semibold whitespace-nowrap text-sm sm:text-base">
-                    Revenue
-                  </p>
-                  <div className="flex gap-3 items-center justify-center">
-                    <h3 className="text-xl lg:text-4xl font-bold">
-                      {allPayments?.length * 499}
-                    </h3>
-                    <GiMoneyStack className="text-green-500 text-3xl lg:text-5xl" />
-                  </div>
-                </div>
-              </div>
+              <StatsItem number={allPayments?.length} title="Subscriptions">
+                <FcSalesPerformance className="text-yellow-500 text-3xl lg:text-5xl" />
+              </StatsItem>
+              <StatsItem number={allPayments?.length * 499} title="Revenue">
+                <GiMoneyStack className="text-green-500 text-3xl lg:text-5xl" />
+              </StatsItem>
             </div>
           </div>
         </div>
